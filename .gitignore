@@ -22,3 +22,7 @@ desktop.ini
 **/firebase-debug.log
 firebase-debug.*.log
 .firebase/
+
+# Build junk
+build_log.txt
+android/.kotlin/
