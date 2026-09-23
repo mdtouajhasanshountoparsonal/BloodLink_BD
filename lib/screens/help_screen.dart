@@ -145,7 +145,7 @@ class _HelpScreenState extends State<HelpScreen> {
                                       style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800)),
                                   SizedBox(height: 2),
                                   Text(
-                                    'Md. Touajhasan Shawon — পোর্টফোলিও দেখুন',
+                                    'MD. TOUAJ HASAN SHANTO — পোর্টফোলিও দেখুন',
                                     style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
                                   ),
                                 ],

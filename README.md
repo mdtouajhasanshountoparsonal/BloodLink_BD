@@ -27,7 +27,7 @@ flutter build apk --release   # APK: build/app/outputs/flutter-apk/app-release.a
 GitHub Pages-এ হোস্টেড অফিসিয়াল সাইট থেকে APK নামানো যায় — দেখুন `docs/` ফোল্ডার।
 
 ## 🧑‍💻 ডেভেলপার
-Md. Touajhasan Shawon — [পোর্টফোলিও](https://mdtouajhasanshountoparsonal.github.io/PORTFOLIO/)
+MD. TOUAJ HASAN SHANTO — [পোর্টফোলিও](https://mdtouajhasanshountoparsonal.github.io/PORTFOLIO/)
 
 ## 📄 লাইসেন্স
 সংগঠিত ব্যবহারের জন্য ওপেন-সোর্স।
