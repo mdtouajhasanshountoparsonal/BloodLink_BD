@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BloodLink BD — রক্তের ডোনার কমিউনিটি</title>
+<meta name="description" content="BloodLink BD — বাংলাদেশের রক্তদাতাদের জন্য ফ্রি অ্যাপ। কাছের ডোনার খুঁজুন, রিকোয়েস্ট করুন, ডোনেশন হিস্টরি রাখুন।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- মেশ-গ্র্যাডিয়েন্ট ব্যাকগ্রাউন্ড ব্লবস -->
+<div class="mesh" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+
+<!-- স্পাইডার-ওয়েব ক্যানভাস (মাউস ফলো) -->
+<canvas id="web" aria-hidden="true"></canvas>
+<div class="filter-tint" aria-hidden="true"></div>
+
+<!-- নেভিগেশন -->
+<header class="nav" id="nav">
+  <div class="nav-inner wrap">
+    <a class="brand" href="#top">
+      <span class="brand-drop">🩸</span>
+      <span class="brand-text">BloodLink <em>BD</em></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">ফিচার</a>
+      <a href="#install">ইনস্টল</a>
+      <a href="#download">ডাউনলোড</a>
+      <a href="#developer">ডেভেলপার</a>
+      <a class="nav-cta" href="#download">APK নিন</a>
+    </nav>
+    <button class="nav-burger" id="burger" aria-label="মেনু"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- হিরো -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="pill">🇧🇩 বাংলাদেশের রক্তদাতাদের জন্য ফ্রি প্ল্যাটফর্ম</span>
+        <h1>রক্তের প্রয়োজনে<br><span class="grad">আর একা নন</span></h1>
+        <p class="lead">
+          কাছের কম্প্যাটিবল ডোনার খুঁজুন, জরুরি রিকোয়েস্ট করুন, কল/WhatsApp-এ সরাসরি যোগাযোগ করুন
+          আর প্রতিটি ডোনেশনের হিস্টরি ব্যাজসহ রাখুন। সম্পূর্ণ বিনামূল্যে।
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#download">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>
+            অ্যান্ড্রয়েড APK ডাউনলোড
+          </a>
+          <a class="btn btn-ghost" href="#features">কী কী ফিচার আছে?</a>
+        </div>
+        <div class="hero-meta">
+          <span class="dot"></span> বর্তমান ভার্সন <strong id="ver">0.1.0</strong> · ১০০% ফ্রি
+        </div>
+      </div>
+
+      <div class="hero-phone">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ph-request">
+              <span class="ph-bad">জরুরি</span>
+              <strong>রক্তের প্রয়োজন</strong>
+              <span class="ph-sub">রক্তের গ্রুপ: <b>A+</b> · ২ ব্যাগ</span>
+              <span class="ph-sub">কুমিল্লা মেডিকেল কলেজ হাসপাতাল</span>
+              <div class="ph-bar"><i style="width:72%"></i></div>
+            </div>
+            <div class="ph-donor">
+              <span class="drop">🩸</span>
+              <div><strong>কাছের ডোনার</strong><small>১.২ কিমি · উপলব্ধ</small></div>
+              <span class="ph-wa">✆ WhatsApp</span>
+            </div>
+            <div class="ph-donor">
+              <span class="drop">🩸</span>
+              <div><strong>স্মার্ট ম্যাচ</strong><small>কম্প্যাটিবল · ভেরিফাইড</small></div>
+              <span class="ph-wa ok">✓</span>
+            </div>
+          </div>
+        </div>
+        <div class="orbit orbit-1"></div>
+        <div class="orbit orbit-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ফিচার -->
+  <section class="section" id="features">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">ফিচারগুলো</span>
+        <h2>এক অ্যাপে সবকিছু</h2>
+        <p>রক্তদানকে সহজ, নিরাপদ ও স্মার্ট করার জন্য নকশা করা হয়েছে।</p>
+      </div>
+      <div class="cards">
+        <div class="card reveal">
+          <div class="card-icon" style="--c:#FF3B5C">🩸</div>
+          <h3>রক্তের রিকোয়েস্ট</h3>
+          <p>জরুরি প্রয়োজনে রিকোয়েস্ট করুন — গ্রুপ, ব্যাগ সংখ্যা, হাসপাতাল ও মেয়াদসহ। সক্রিয় ডোনাররা সাথে সাথে নোটিশ পাবেন।</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon" style="--c:#40C4FF">📍</div>
+          <h3>কাছের ডোনার</h3>
+          <p>আপনার লোকেশন অনুযায়ী সবচেয়ে কাছের ডোনারদের তালিকা, ম্যাপ ও রুট দূরত্বসহ — নিকটতম থেকে সাজানো।</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon" style="--c:#B388FF">⚡</div>
+          <h3>স্মার্ট ম্যাচ</h3>
+          <p>গ্রুপ কম্প্যাটিবিলিটি, দূরত্ব, ভেরিফিকেশন ও ডোনেশন রেকর্ড মিলিয়ে সেরা ম্যাচের স্কোর — শুধুই উপযুক্ত ডোনার।</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon" style="--c:#FFC400">🏅</div>
+          <h3>ডোনেশন হিস্টরি ও ব্যাজ</h3>
+          <p>প্রত্যেক নিশ্চিত ডোনেশন প্রোফাইলে সেভ হয় — লাইফটাইম রেকর্ড, ভেরিফাইড ব্যাজ ও রিলিজ নোট।</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon" style="--c:#00E676">💬</div>
+          <h3>কল / WhatsApp যোগাযোগ</h3>
+          <p>চ্যাট উন্মুক্ত নয় — নম্বর প্রকাশ করলে সরাসরি কল আর WhatsApp-এ মেসেজ দিন, প্রাইভেসি নিয়ন্ত্রণ আপনার হাতে।</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon" style="--c:#FF9100">🔐</div>
+          <h3>প্রাইভেসি ও কোটা</h3>
+          <p>নম্বর লুকানোর অপশন, ইন-অ্যাপ ব্যবহার/কোটা মনিটরিং আর প্রশাসকের আপডেট নোটিফিকেশন — তারতম্য স্বচ্ছ।</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ইনস্টল -->
+  <section class="section alt" id="install">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker">ইনস্টল করার ধাপ</span>
+        <h2>৩ ধাপে শুরু</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="step-no">১</span>
+          <h4>APK ডাউনলোড করুন</h4>
+          <p>নিচের ডাউনলোড বাটন থেকে সর্বশেষ ভার্সনের .apk ফাইল নামান।</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-no">২</span>
+          <h4>ইনস্টল অনুমোদন দিন</h4>
+          <p>ফাইলে চাপুন, “অজানা উৎস থেকে ইনস্টল” অনুমতি দিন — গুগল প্লে নয়, তাই ফোন সেটিংসে এক ক্লিক স্কিপ।</p>
+        </div>
+        <div class="step reveal">
+          <span class="step-no">৩</span>
+          <h4>প্রোফাইল বানিয়ে শুরু</h4>
+          <p>নাম, গ্রুপ ও লোকেশন দিন, “রক্ত দিতে চাই” চালু করুন — এরপরই ডোনার তালিকায় যুক্ত হবেন।</p>
+        </div>
+      </div>
+      <div class="note reveal">⚙️ ভার্সন বাড়লে অ্যাপ খুললেই “নতুন ভার্সন” নোটিফিকেশন পাবেন, এ পেজ থেকে ডাউনলোড করতে পারবেন।</div>
+    </div>
+  </section>
+
+  <!-- ডাউনলোড -->
+  <section class="section" id="download">
+    <div class="wrap">
+      <div class="download-card reveal">
+        <div class="d-left">
+          <span class="d-icon">🩸</span>
+          <div>
+            <span class="kicker">সর্বশেষ রিলিজ</span>
+            <h2>BloodLink BD — ভার্সন <span id="ver2">0.1.0</span></h2>
+            <p class="d-desc">
+              অ্যান্ড্রয়েড ডিভাইসের জন্য ব্লাড-ডোনেশন অ্যাপ। আকার ছোট, দ্রুত, অফলাইন-সেফ।
+            </p>
+            <ul class="d-list">
+              <li>✓ লোকেশন-ভিত্তিক কাছের ডোনার</li>
+              <li>✓ স্মার্ট কম্প্যাটিবল ম্যাচিং</li>
+              <li>✓ কল + WhatsApp সরাসরি যোগাযোগ</li>
+              <li>✓ ডোনেশন হিস্টরি ও ভেরিফাইড ব্যাজ</li>
+            </ul>
+          </div>
+        </div>
+        <div class="d-right">
+          <a id="apkBtn" class="btn btn-primary btn-big" href="downloads/BloodLink_v0.1.0.apk" download>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>
+            <span id="apkBtnText" style="display:inline-flex;align-items:center;gap:8px">📦 APK ডাউনলোড করুন</span>
+          </a>
+          <p class="d-small">
+            ফাইলটি <code>docs/downloads/BloodLink_v0.1.0.apk</code>-এ রাখুন<br>
+            অথবা <a id="apkAlt" href="#">আপডেট নির্দেশিকা</a> দেখুন।<br>
+            <span id="relNotes" style="opacity:.72">রিলিজ নোট পড়তে নিচের স্ক্রল করুন।</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ডেভেলপার -->
+  <section class="section alt" id="developer">
+    <div class="wrap">
+      <div class="dev-card reveal">
+        <div class="dev-avatar">M</div>
+        <div class="dev-info">
+          <span class="kicker">ডেভেলপার</span>
+          <h2>মোঃ তৌআজ্হাসান শাওন</h2>
+          <p>
+            BloodLink BD-এর ডিজাইনার ও ডেভেলপার। ফ্লাটার, ফায়ারবেস আর নকশার ভক্ত —
+            রক্তদানকে ডিজিটাল করে তোলার একটি ক্ষুদ্র প্রয়াস।
+          </p>
+          <div class="dev-links">
+            <a class="btn btn-primary" href="https://mdtouajhasanshountoparsonal.github.io/PORTFOLIO/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 .9-4.5 4.3 1 6.8L12 17l-5.5 3 1-6.8L3 8.9 9 8l3-6z"/></svg>
+              পোর্টফোলিও দেখুন
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/mdtouajhasanshountoparsonal" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap foot-inner">
+    <span>© <span id="year"></span> BloodLink BD — রক্ত দিন, জীবন বাঁচান।</span>
+    <span class="foot-links">
+      <a href="#top">উপরে</a> ·
+      <a href="https://mdtouajhasanshountoparsonal.github.io/PORTFOLIO/" target="_blank" rel="noopener">ডেভেলপার</a>
+    </span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

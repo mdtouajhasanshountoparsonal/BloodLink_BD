@@ -1,0 +1,142 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return request.auth.uid == uid;
+    }
+
+    // অ্যাডমিন: appMeta/main.admins অ্যারেতে uid থাকতে হবে
+    function admin() {
+      return request.auth != null
+        && get(/databases/$(database)/documents/appMeta/main).data.admins.hasAny([request.auth.uid]);
+    }
+
+    // মেয়াদোত্তীর্ণ রিকোয়েস্ট শুধু 'expired' অবস্থায় বন্ধ করা যায়
+    function canAutoExpire() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'closedAt', 'closedBy'])
+        && request.resource.data.status == 'expired'
+        && request.resource.data.closedBy == 'auto'
+        && resource.data.status == 'active'
+        && request.resource.data.closedAt != null
+        && resource.data.expiresAt is timestamp
+        && request.time.toMillis() > resource.data.expiresAt.toMillis();
+    }
+
+    // ব্যাগের চাহিদা পূরণ হলে রিকোয়েস্ট 'fulfilled' হতে পারে (যেকোনো signed-in),
+    // প্লাস ভেরিফাইড ডোনারের uid সংরক্ষণ
+    function canAutoFulfill() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'closedAt', 'closedBy', 'confirmedDonor'])
+        && request.resource.data.status == 'fulfilled'
+        && request.resource.data.closedBy == 'fulfill'
+        && resource.data.status == 'active'
+        && request.resource.data.closedAt != null
+        && request.resource.data.confirmedDonor is string;
+    }
+
+    // রোগী ডোনারকে কনফার্ম করলে ডোনারের প্রোফাইলে ডোনেশন রেকর্ড হয়
+    function canConfirmDonation() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['donations', 'lastDonation', 'verified', 'lastDonationByRequest'])
+        && request.resource.data.donations is int
+        && request.resource.data.verified == true
+        && request.resource.data.lastDonation is timestamp
+        && request.resource.data.lastDonationByRequest is string
+        && uid != request.auth.uid
+        && get(/databases/$(database)/documents/requests/$(request.resource.data.lastDonationByRequest)).data.uid == request.auth.uid
+        && get(/databases/$(database)/documents/requests/$(request.resource.data.lastDonationByRequest)/responses/$(uid)).data.status == 'donate';
+    }
+
+    // ডোনারকে কনফার্ম করা হলে তার ডোনেশন হিস্টরি অ্যাড হয় (রিকোয়েস্ট মালিক লিখে)
+    function canCreateDonationHistory() {
+      return request.resource.data.requestUid == request.auth.uid
+        && request.resource.data.donorUid == uid
+        && request.resource.data.requestId is string
+        && request.resource.data.bloodGroup is string
+        && get(/databases/$(database)/documents/requests/$(request.resource.data.requestId)/responses/$(uid)).data.status == 'donate';
+    }
+
+    // ---------- Users ----------
+    match /users/{uid} {
+      // Create only own profile on register
+      allow create: if signedIn() && isOwner(uid);
+      // Own profile update (availability, location, profile edit) OR
+      // requester confirming a donor's donation OR admin banning
+      allow update: if signedIn() && (isOwner(uid) || canConfirmDonation()
+        || (admin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['banned'])
+          && request.resource.data.banned is bool));
+      // Read own doc always; other users only if they are donors; admin reads all
+      allow read: if signedIn() && (isOwner(uid) || resource.data.isDonor == true || admin());
+      // No delete for users
+
+      // ---------- Donation history (public evidence of donations) ----------
+      match /donationsHistory/{recordId} {
+        allow read: if signedIn() && (isOwner(uid) || resource.data.requestUid == request.auth.uid);
+        allow create: if signedIn() && canCreateDonationHistory();
+        allow update, delete: if isOwner(uid);
+      }
+    }
+
+    // ---------- Requests ----------
+    match /requests/{requestId} {
+      // Anyone signed-in can read all requests (live list)
+      allow read: if signedIn();
+      // Any signed-in user can create an emergency request
+      allow create: if signedIn() && request.resource.data.createdAt != null;
+      // Non-owners may ONLY close overdue/fulfilled requests (auto-expiry / auto-fulfill).
+      allow update: if signedIn() && (resource.data.uid == request.auth.uid
+        || canAutoExpire()
+        || canAutoFulfill()
+        || admin());
+      // Admin only can delete a request
+      allow delete: if signedIn() && admin();
+
+      // ---------- Responses (I Can Donate / Maybe / Can't) ----------
+      match /responses/{responseUid} {
+        allow read: if signedIn();
+        // Doc id = the responding user's uid; must match the sender
+        allow create: if signedIn()
+          && responseUid == request.auth.uid
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.status in ['donate', 'maybe', 'cant'];
+        // Only the responder may update/delete their own response
+        allow update, delete: if signedIn() && responseUid == request.auth.uid;
+      }
+
+      // ---------- Chat (request <-> donor coordination) ----------
+      match /chat/{messageId} {
+        // Anyone signed-in to the request can read the thread
+        allow read: if signedIn();
+        // Sender must match the message author
+        allow create: if signedIn()
+          && request.resource.data.from == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 1000;
+        // Author can edit/delete their own message
+        allow update, delete: if signedIn()
+          && resource.data.from == request.auth.uid;
+      }
+    }
+
+    // ---------- Reports (report a user / bug / other) ----------
+    match /reports/{reportId} {
+      allow create: if signedIn()
+        && request.resource.data.reporter == request.auth.uid
+        && request.resource.data.kind in ['user', 'bug', 'other']
+        && request.resource.data.details is string
+        && request.resource.data.details.size() <= 2000;
+      allow read, update, delete: if signedIn() && resource.data.reporter == request.auth.uid;
+    }
+
+    // ---------- App meta (update notice / force close) ----------
+    // প্রশাসক রাখেন: latestVersion, downloadUrl, notice, forceClose, forceMessage, admins
+    match /appMeta/{docId} {
+      allow read: if true;
+      allow update, delete: if admin();
+    }
+  }
+}
