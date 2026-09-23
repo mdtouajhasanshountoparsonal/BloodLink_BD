@@ -4,6 +4,7 @@ import '../models/app_user.dart';
 import '../services/admin_service.dart';
 import '../services/auth_service.dart';
 import '../theme/app_colors.dart';
+import '../utils/blood_compat.dart';
 import '../widgets/background_decor.dart';
 import '../widgets/blood_group_chip.dart';
 import '../widgets/glass_card.dart';
@@ -102,6 +103,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _StatGrid(user: _user),
                 const SizedBox(height: 20),
                 _ReputationCard(user: _user),
+                const SizedBox(height: 20),
+                _DonationStatusCard(user: _user),
                 const SizedBox(height: 22),
                 const Text('সেটিংস', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 12),
@@ -310,6 +313,64 @@ class _StatTile extends StatelessWidget {
             label,
             textAlign: TextAlign.center,
             style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DonationStatusCard extends StatelessWidget {
+  const _DonationStatusCard({required this.user});
+
+  final AppUser? user;
+
+  static String _fmt(DateTime t) =>
+      '${t.day}/${t.month}/${t.year}';
+
+  @override
+  Widget build(BuildContext context) {
+    final last = user?.lastDonation;
+    final win = DonationEligibility.forUser(last);
+    final color = win.eligible ? AppColors.normal : AppColors.urgent;
+    return GlassCard(
+      child: Row(
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.14),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              win.eligible ? Icons.add_alert_rounded : Icons.schedule_rounded,
+              color: color,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'সর্বশেষ রক্তদান: ${last == null ? 'এখনো দেননি' : _fmt(last)}',
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 3),
+                if (win.eligible)
+                  const Text(
+                    'এখনই রক্ত দিতে পারেন',
+                    style: TextStyle(color: AppColors.normal, fontSize: 12.5, fontWeight: FontWeight.w800),
+                  )
+                else
+                  Text(
+                    'আবার পারবেন: ${_fmt(win.eligibleFrom!)} — আর ${win.remaining} দিন বাকি',
+                    style: const TextStyle(color: AppColors.urgent, fontSize: 12.5, fontWeight: FontWeight.w700),
+                  ),
+              ],
+            ),
           ),
         ],
       ),

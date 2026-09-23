@@ -21,3 +21,23 @@ class BloodCompat {
   }) =>
       (compatibleDonorsFor[receiverGroup] ?? const []).contains(donorGroup);
 }
+
+/// রক্তদানের ৯০ দিনের নিয়ম — কবে আবার রক্ত দেওয়া যাবে।
+class DonationEligibility {
+  DonationEligibility._();
+
+  static const int gapDays = 90;
+
+  /// (eligible, eligibleFrom, remainingDays)
+  /// - lastDonation null → এখনই পারবেন (eligibleFrom = null)
+  /// - remainingDays দিতে পেলে ০; বাকি থাকলে ইতিবাচক
+  static ({bool eligible, DateTime? eligibleFrom, int remaining}) forUser(
+      DateTime? lastDonation) {
+    if (lastDonation == null) {
+      return (eligible: true, eligibleFrom: null, remaining: 0);
+    }
+    final from = lastDonation.add(const Duration(days: gapDays));
+    final remaining = from.difference(DateTime.now()).inDays;
+    return (eligible: remaining <= 0, eligibleFrom: from, remaining: remaining < 0 ? 0 : remaining);
+  }
+}

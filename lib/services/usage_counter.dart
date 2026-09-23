@@ -112,6 +112,9 @@ class UsageCounter {
   }
 
   /// শেষ ৭ দিনের (আজসহ) মোট read — ধারণা ও ছোট গ্রাফের জন্য।
+  static const List<String> _weekdays = [
+    'সোম', 'মঙ্গল', 'বুধ', 'বৃহস্পতি', 'শুক্র', 'শনি', 'রবি'];
+
   List<(String, int)> lastSevenDaysReads() {
     final now = DateTime.now();
     return List.generate(7, (i) {
@@ -134,6 +137,27 @@ class UsageCounter {
           .fold(0, (a, e) => a + e.value);
       return (i == 0 ? 'আজ' : '${d.day}/${d.month}', total);
     });
+  }
+
+  /// দিনভিত্তিক ব্যবহার (সবচেয়ে নতুন শেষে) — (লেবেল, রিড, রাইট)।
+  List<({String label, int reads, int writes})> dailySummary({int days = 14}) {
+    final now = DateTime.now();
+    final out = <({String label, int reads, int writes})>[];
+    for (var i = days - 1; i >= 0; i--) {
+      final d = now.subtract(Duration(days: i));
+      final date = _date(d);
+      final r = _reads.entries
+          .where((e) => e.key.endsWith('@$date'))
+          .fold(0, (a, e) => a + e.value);
+      final w = _writes.entries
+          .where((e) => e.key.endsWith('@$date'))
+          .fold(0, (a, e) => a + e.value);
+      final label = i == 0
+          ? 'আজ'
+          : '${_weekdays[d.weekday - 1]} ${d.day}/${d.month}';
+      out.add((label: label, reads: r, writes: w));
+    }
+    return out;
   }
 
   List<(String, int)> _seriesToday(Map<String, int> map) {

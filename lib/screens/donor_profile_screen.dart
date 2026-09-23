@@ -5,6 +5,7 @@ import '../models/donor.dart';
 import '../services/contact_service.dart';
 import '../services/request_service.dart';
 import '../theme/app_colors.dart';
+import '../utils/blood_compat.dart';
 import '../widgets/background_decor.dart';
 import '../widgets/blood_group_chip.dart';
 
@@ -140,6 +141,8 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _headerCard(d),
+                                const SizedBox(height: 16),
+                                _donationStatusCard(d),
                                 const SizedBox(height: 16),
                                 _tierCard(d),
                                 const SizedBox(height: 16),
@@ -372,6 +375,59 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _donationStatusCard(Donor d) {
+    final win = DonationEligibility.forUser(d.lastDonation);
+    final eligible = win.eligible;
+    final color = eligible ? AppColors.normal : AppColors.urgent;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.surface.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.45)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(
+              eligible ? Icons.add_alert_rounded : Icons.schedule_rounded,
+              color: color,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'সর্বশেষ রক্তদান: ${d.lastDonation == null ? 'এখনো দেননি' : _shortDate(d.lastDonation!)}',
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                if (eligible)
+                  const Text(
+                    'এখনই রক্ত দিতে পারেন',
+                    style: TextStyle(color: AppColors.normal, fontSize: 12.5, fontWeight: FontWeight.w800),
+                  )
+                else
+                  Text(
+                    'আবার পারবেন: ${_shortDate(win.eligibleFrom!)}\nআর ${win.remaining} দিন বাকি (${DonationEligibility.gapDays} দিনের নিয়ম)',
+                    style: const TextStyle(color: AppColors.urgent, fontSize: 12.5, fontWeight: FontWeight.w700, height: 1.5),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

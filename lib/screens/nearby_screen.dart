@@ -312,10 +312,9 @@ class _NearbyScreenState extends State<NearbyScreen> {
           ),
           children: [
             TileLayer(
-              urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-              subdomains: const ['a', 'b', 'c', 'd'],
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.bloodlink.bloodlink_bd',
-              retinaMode: true,
+              retinaMode: false,
             ),
             MarkerLayer(
               markers: [
@@ -338,7 +337,6 @@ class _NearbyScreenState extends State<NearbyScreen> {
             RichAttributionWidget(
               attributions: [
                 TextSourceAttribution('© OpenStreetMap contributors'),
-                TextSourceAttribution('© CARTO'),
               ],
             ),
           ],

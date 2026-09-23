@@ -82,6 +82,10 @@ class _UsageScreenState extends State<UsageScreen> {
                     const Text('গত ৭ দিন', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
                     const SizedBox(height: 8),
                     _weekBars(),
+                    const SizedBox(height: 20),
+                    const Text('দিনভিত্তিক ব্যবহার (গত ১৪ দিন)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 8),
+                    _dailyList(),
                     if (byUid.isNotEmpty) ...[
                       const SizedBox(height: 20),
                       const Text('আজকের রাইট — অ্যাকাউন্ট অনুযায়ী (এই ডিভাইস)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
@@ -243,6 +247,111 @@ class _UsageScreenState extends State<UsageScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _dailyList() {
+    final data = UsageCounter.instance.dailySummary(days: 14);
+    final maxTotal = data
+        .map((e) => e.reads + e.writes)
+        .fold(1, (a, b) => a > b ? a : b);
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surface.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Column(
+        children: [for (final d in data) _dailyRow(d, maxTotal)],
+      ),
+    );
+  }
+
+  Widget _dailyRow(
+      ({String label, int reads, int writes}) d, int maxTotal) {
+    final total = d.reads + d.writes;
+    final ratio = total == 0
+        ? 0.0
+        : (total / maxTotal).clamp(0.0, 1.0).toDouble();
+    final color = ratio >= 0.66
+        ? AppColors.critical
+        : ratio >= 0.33
+            ? AppColors.urgent
+            : total == 0
+                ? AppColors.border
+                : AppColors.normal;
+    final label = total == 0
+        ? 'ব্যবহার নেই'
+        : ratio >= 0.66
+            ? 'বেশি'
+            : ratio >= 0.33
+                ? 'মাঝারি'
+                : 'কম';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 86,
+            child: Text(
+              d.label,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Container(
+                    height: 8,
+                    width: double.infinity,
+                    color: AppColors.surfaceHigh,
+                    child: FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: ratio == 0 ? null : ratio,
+                      child: Container(height: 8, color: color),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'রিড ${d.reads} · রাইট ${d.writes}',
+                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 10.5),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 66,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: total == 0 ? AppColors.textSecondary : color,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
