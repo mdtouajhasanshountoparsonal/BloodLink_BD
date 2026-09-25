@@ -1,11 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/app_user.dart';
+import '../models/blood_list_entry.dart';
 import '../models/blood_request.dart';
 import '../models/donor.dart';
 import '../services/auth_service.dart';
+import '../services/admin_service.dart';
+import '../services/blood_list_service.dart';
+import '../services/contact_service.dart';
 import '../services/location_service.dart';
 import '../services/request_service.dart';
 import '../theme/app_colors.dart';
@@ -14,6 +19,7 @@ import '../widgets/glass_button.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/request_card.dart';
 import '../widgets/section_header.dart';
+import 'blood_list_screen.dart';
 import 'new_request_screen.dart';
 import 'nearby_requests_screen.dart';
 import 'donors_screen.dart';
@@ -22,12 +28,23 @@ import 'request_detail_screen.dart';
 import 'requests_screen.dart';
 
 void _goNearbyRequests(BuildContext context) {
-  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NearbyRequestsScreen()));
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (_) => const NearbyRequestsScreen()));
+}
+
+void _goBloodList(BuildContext context) {
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (_) => const BloodListScreen()));
 }
 
 double _kmOf(BloodRequest r, double lat, double lng) {
   if (r.latitude == null || r.longitude == null) return double.infinity;
-  return LocationService.instance.distanceKm(lat, lng, r.latitude!, r.longitude!);
+  return LocationService.instance.distanceKm(
+    lat,
+    lng,
+    r.latitude!,
+    r.longitude!,
+  );
 }
 
 class HomeScreen extends StatefulWidget {
@@ -65,13 +82,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 _Header(
                   user: _user,
                   onNotifications: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const NotificationsScreen(),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
                 const _EmergencyHero(),
                 const SizedBox(height: 20),
                 _StatsRow(user: _user),
+                const SizedBox(height: 26),
+                SectionHeader(
+                  title: 'রক্তদাতা তালিকা',
+                  actionLabel: 'সব দেখুন',
+                  onAction: () => _goBloodList(context),
+                ),
+                const SizedBox(height: 12),
+                _BloodListPreview(),
                 const SizedBox(height: 26),
                 SectionHeader(
                   title: 'কাছের রিকোয়েস্ট',
@@ -103,7 +130,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     final ulng = my?.longitude;
                     final list = all.take(3).toList();
                     if (ulat != null && ulng != null) {
-                      list.sort((a, b) => (_kmOf(a, ulat, ulng)).compareTo(_kmOf(b, ulat, ulng)));
+                      list.sort(
+                        (a, b) => (_kmOf(
+                          a,
+                          ulat,
+                          ulng,
+                        )).compareTo(_kmOf(b, ulat, ulng)),
+                      );
                     }
                     if (list.isEmpty) {
                       return const Padding(
@@ -123,7 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               request: r,
                               onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => RequestDetailScreen(request: r),
+                                  builder: (_) =>
+                                      RequestDetailScreen(request: r),
                                 ),
                               ),
                             ),
@@ -162,9 +196,16 @@ class _Header extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('আসসালামু আলাইকুম', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+              const Text(
+                'আসসালামু আলাইকুম',
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+              ),
               const SizedBox(height: 2),
-              Text(name, style: Theme.of(context).textTheme.headlineMedium, overflow: TextOverflow.ellipsis),
+              Text(
+                name,
+                style: Theme.of(context).textTheme.headlineMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),
@@ -174,11 +215,7 @@ class _Header extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               Icon(Icons.notifications_none_rounded, size: 23),
-              Positioned(
-                right: -2,
-                top: -4,
-                child: _Badge(),
-              ),
+              Positioned(right: -2, top: -4, child: _Badge()),
             ],
           ),
         ),
@@ -198,7 +235,11 @@ class _Header extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             letter,
-            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w800),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
       ],
@@ -292,7 +333,11 @@ class _EmergencyHero extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       'Emergency রিকোয়েস্ট পাঠান, আশপাশের সঠিক ডোনার খুঁজুন',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13, height: 1.4),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        fontSize: 13,
+                        height: 1.4,
+                      ),
                     ),
                   ],
                 ),
@@ -304,9 +349,16 @@ class _EmergencyHero extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.12),
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.22), width: 1.4),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.22),
+                    width: 1.4,
+                  ),
                 ),
-                child: const Icon(Icons.water_drop, color: Colors.white, size: 34),
+                child: const Icon(
+                  Icons.water_drop,
+                  color: Colors.white,
+                  size: 34,
+                ),
               ),
             ],
           ),
@@ -315,10 +367,12 @@ class _EmergencyHero extends StatelessWidget {
             label: 'Emergency Request',
             icon: Icons.add_alert_rounded,
             textColor: const Color(0xFFC4001D),
-            gradient: const LinearGradient(colors: [Colors.white, Color(0xFFE8E8E8)]),
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const NewRequestScreen()),
+            gradient: const LinearGradient(
+              colors: [Colors.white, Color(0xFFE8E8E8)],
             ),
+            onTap: () => Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const NewRequestScreen())),
           ),
         ],
       ),
@@ -344,18 +398,14 @@ class _StatsRowState extends State<_StatsRow> {
   @override
   void initState() {
     super.initState();
-    _sub1 = RequestService.instance
-        .donorsStream()
-        .listen((list) {
-          debugPrint('HOME donorsStream: ${list.length} জন ডোনার');
-          if (mounted) setState(() => _donors = list);
-        });
-    _sub2 = RequestService.instance
-        .requestsStream()
-        .listen((list) {
-          debugPrint('HOME requestsStream: ${list.length}টি সক্রিয়');
-          if (mounted) setState(() => _requests = list);
-        });
+    _sub1 = RequestService.instance.donorsStream().listen((list) {
+      debugPrint('HOME donorsStream: ${list.length} জন ডোনার');
+      if (mounted) setState(() => _donors = list);
+    });
+    _sub2 = RequestService.instance.requestsStream().listen((list) {
+      debugPrint('HOME requestsStream: ${list.length}টি সক্রিয়');
+      if (mounted) setState(() => _requests = list);
+    });
   }
 
   @override
@@ -457,7 +507,10 @@ class _StatCard extends StatelessWidget {
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 11.5),
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 11.5,
+            ),
           ),
         ],
       ),
@@ -495,18 +548,32 @@ class _DonationStatusCard extends StatelessWidget {
                   color: AppColors.primary.withValues(alpha: 0.14),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.water_drop_outlined, color: AppColors.primary, size: 23),
+                child: const Icon(
+                  Icons.water_drop_outlined,
+                  color: AppColors.primary,
+                  size: 23,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('শেষ ডোনেশন', style: TextStyle(color: AppColors.textSecondary, fontSize: 12.5)),
+                    const Text(
+                      'শেষ ডোনেশন',
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12.5,
+                      ),
+                    ),
                     const SizedBox(height: 3),
                     Text(
                       hadDonation ? _bnDate(last) : 'এখনো কোনো ডোনেশন হয়নি',
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
@@ -515,19 +582,39 @@ class _DonationStatusCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: eligible
                     ? [
-                        const Text('প্রস্তুত ✓', style: TextStyle(color: AppColors.normal, fontSize: 15, fontWeight: FontWeight.w800)),
+                        const Text(
+                          'প্রস্তুত ✓',
+                          style: TextStyle(
+                            color: AppColors.normal,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                         const SizedBox(height: 3),
                         Text(
                           'ডোনেশন: $donations বার',
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 11,
+                          ),
                         ),
                       ]
                     : [
-                        Text('$daysLeft দিন বাকি', style: const TextStyle(color: AppColors.urgent, fontSize: 15, fontWeight: FontWeight.w800)),
+                        Text(
+                          '$daysLeft দিন বাকি',
+                          style: const TextStyle(
+                            color: AppColors.urgent,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                         const SizedBox(height: 3),
                         Text(
                           'পরবর্তী: ${_bnDate(nextDate!)}',
-                          style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 11,
+                          ),
                         ),
                       ],
               ),
@@ -549,7 +636,243 @@ class _DonationStatusCard extends StatelessWidget {
   }
 
   String _bnDate(DateTime t) {
-    const months = ['', 'জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+    const months = [
+      '',
+      'জানুয়ারি',
+      'ফেব্রুয়ারি',
+      'মার্চ',
+      'এপ্রিল',
+      'মে',
+      'জুন',
+      'জুলাই',
+      'আগস্ট',
+      'সেপ্টেম্বর',
+      'অক্টোবর',
+      'নভেম্বর',
+      'ডিসেম্বর',
+    ];
     return '${t.day} ${months[t.month]} ${t.year}';
+  }
+}
+
+class _BloodListPreview extends StatefulWidget {
+  const _BloodListPreview();
+
+  @override
+  State<_BloodListPreview> createState() => _BloodListPreviewState();
+}
+
+class _BloodListPreviewState extends State<_BloodListPreview> {
+  ({List<String> admins, List<String> managers})? _roles;
+
+  @override
+  void initState() {
+    super.initState();
+    AdminService.instance.fetchRoles().then((r) {
+      if (mounted) setState(() => _roles = r);
+    });
+  }
+
+  String? _roleOf(String uid) {
+    final r = _roles;
+    if (r == null || uid.isEmpty) return null;
+    if (r.admins.contains(uid)) return 'admin';
+    if (r.managers.contains(uid)) return 'manager';
+    return null;
+  }
+
+  Future<void> _call(String phone) async {
+    await launchUrl(ContactService.instance.callUri(phone));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<List<BloodListEntry>>(
+      stream: BloodListService.instance.entriesStream(),
+      builder: (ctx, snap) {
+        if (snap.connectionState == ConnectionState.waiting) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(
+              child: SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+          );
+        }
+        final list = snap.data ?? const <BloodListEntry>[];
+        if (list.isEmpty) {
+          return const GlassCard(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'এখনো কেউ যুক্ত হয়নি — ম্যানেজার/অ্যাডমিন নাম-নম্বর যোগ করবেন।',
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 12.5,
+                height: 1.5,
+              ),
+            ),
+          );
+        }
+        return Column(
+          children: [
+            for (final e in list.take(3))
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _PreviewRow(
+                  entry: e,
+                  role: _roleOf(e.addedBy),
+                  onCall: _call,
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PreviewRow extends StatelessWidget {
+  const _PreviewRow({required this.entry, required this.onCall, this.role});
+
+  final BloodListEntry entry;
+  final String? role;
+  final Future<void> Function(String phone) onCall;
+
+  @override
+  Widget build(BuildContext context) {
+    final e = entry;
+    final (roleLabel, roleColor, roleIcon) = switch (role) {
+      'admin' => ('অ্যাডমিন', AppColors.gold, Icons.shield_outlined),
+      'manager' => (
+        'ম্যানেজার',
+        AppColors.info,
+        Icons.admin_panel_settings_outlined,
+      ),
+      _ => (null, null, null),
+    };
+    return GlassCard(
+      padding: const EdgeInsets.all(14),
+      onTap: () => _goBloodList(context),
+      child: Row(
+        children: [
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.14),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        e.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    if (e.verified) ...[
+                      const SizedBox(width: 6),
+                      const Icon(
+                        Icons.verified_rounded,
+                        color: AppColors.normal,
+                        size: 14,
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 2),
+                if (roleLabel != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 3),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(roleIcon, size: 11, color: roleColor),
+                        const SizedBox(width: 4),
+                        Text(
+                          roleLabel,
+                          style: TextStyle(
+                            color: roleColor,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                Text(
+                  e.area.isEmpty ? e.bloodGroup : '${e.area} · ${e.bloodGroup}',
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              e.bloodGroup,
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          if (e.phones.isNotEmpty) ...[
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: () => onCall(e.phones.first),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.normal.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.phone_in_talk,
+                  color: AppColors.normal,
+                  size: 16,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
   }
 }

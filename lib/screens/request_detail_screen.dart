@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/app_user.dart';
+import '../models/blood_list_entry.dart';
 import '../models/blood_request.dart';
 import '../models/donor.dart';
 import '../services/auth_service.dart';
+import '../services/blood_list_service.dart';
 import '../services/contact_service.dart';
 import '../services/request_service.dart';
 import '../theme/app_colors.dart';
+import '../utils/blood_compat.dart';
 import '../utils/match_score.dart';
 import '../widgets/background_decor.dart';
 import '../widgets/blood_group_chip.dart';
 import '../widgets/donor_card.dart';
+import 'blood_list_screen.dart';
 import 'chat_screen.dart';
 import 'donor_profile_screen.dart';
 
@@ -62,33 +66,38 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
     _sub = RequestService.instance.requestStream(widget.request.id).listen((r) {
       if (!mounted) return;
       RequestService.instance.expireIfOverdue(r);
-      if (r.confirmedDonor != null && r.confirmedDonor!.isNotEmpty && _confirmedDonorName == null) {
-        _cdSub = RequestService.instance.userStreamByUid(r.confirmedDonor!).listen((d) {
-          if (mounted && d != null) setState(() => _confirmedDonorName = d.name);
-        });
+      if (r.confirmedDonor != null &&
+          r.confirmedDonor!.isNotEmpty &&
+          _confirmedDonorName == null) {
+        _cdSub = RequestService.instance
+            .userStreamByUid(r.confirmedDonor!)
+            .listen((d) {
+              if (mounted && d != null) {
+                setState(() => _confirmedDonorName = d.name);
+              }
+            });
       }
       setState(() => _request = r);
     });
     _respSub = RequestService.instance
         .responsesStream(widget.request.id)
         .listen((list) {
-      if (!mounted) return;
-      setState(() => _responses = list);
-      // ব্যাগের চাহিদা পূরণ হলে রিকোয়েস্ট 'fulfilled' করে দিই
-      if (!_r.isClosed && !_fulfillFired) {
-        final confirmed = list.where((x) => x.status == 'donate').length;
-        if (confirmed >= _r.bags) {
-          _fulfillFired = true;
-          RequestService.instance.fulfill(_r.id);
-        }
-      }
-    });
+          if (!mounted) return;
+          setState(() => _responses = list);
+          // ব্যাগের চাহিদা পূরণ হলে রিকোয়েস্ট 'fulfilled' করে দিই
+          if (!_r.isClosed && !_fulfillFired) {
+            final confirmed = list.where((x) => x.status == 'donate').length;
+            if (confirmed >= _r.bags) {
+              _fulfillFired = true;
+              RequestService.instance.fulfill(_r.id);
+            }
+          }
+        });
   }
 
   BloodRequest get _r => _request ?? widget.request;
 
-  int get _confirmed =>
-      _responses.where((x) => x.status == 'donate').length;
+  int get _confirmed => _responses.where((x) => x.status == 'donate').length;
 
   Future<void> _respond(String status) async {
     final user = _user;
@@ -109,7 +118,13 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         phone: user.phone,
       );
       messenger.showSnackBar(
-        SnackBar(content: Text(status == 'donate' ? 'ধন্যবাদ! হাসপাতালে জানান দেওয়া হবে' : 'আপনার সাড়া দেওয়া হয়েছে')),
+        SnackBar(
+          content: Text(
+            status == 'donate'
+                ? 'ধন্যবাদ! হাসপাতালে জানান দেওয়া হবে'
+                : 'আপনার সাড়া দেওয়া হয়েছে',
+          ),
+        ),
       );
     } catch (_) {
       if (mounted) {
@@ -152,15 +167,26 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.surface,
         title: const Text('রক্ত সম্পন্ন হয়েছে?'),
-        content: const Text('আপনি কি নিশ্চিত রক্ত পাওয়া গেছে? রিকোয়েস্ট বন্ধ হয়ে যাবে।'),
+        content: const Text(
+          'আপনি কি নিশ্চিত রক্ত পাওয়া গেছে? রিকোয়েস্ট বন্ধ হয়ে যাবে।',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('না', style: TextStyle(color: AppColors.textSecondary)),
+            child: const Text(
+              'না',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('হ্যাঁ, সম্পন্ন', style: TextStyle(color: AppColors.normal, fontWeight: FontWeight.w800)),
+            child: const Text(
+              'হ্যাঁ, সম্পন্ন',
+              style: TextStyle(
+                color: AppColors.normal,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
         ],
       ),
@@ -191,11 +217,20 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('বাতিল', style: TextStyle(color: AppColors.textSecondary)),
+            child: const Text(
+              'বাতিল',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('কনফার্ম', style: TextStyle(color: AppColors.normal, fontWeight: FontWeight.w800)),
+            child: const Text(
+              'কনফার্ম',
+              style: TextStyle(
+                color: AppColors.normal,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
         ],
       ),
@@ -221,9 +256,7 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
 
   void _openProfile(String uid) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => DonorProfileScreen(donorUid: uid),
-      ),
+      MaterialPageRoute(builder: (_) => DonorProfileScreen(donorUid: uid)),
     );
   }
 
@@ -257,6 +290,17 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
     if (!ok) _toast('WhatsApp খোলা যায়নি');
   }
 
+  Future<void> _roCall(BloodListEntry e) async {
+    if (e.phones.isEmpty) return;
+    final ok = await launchUrl(ContactService.instance.callUri(e.phones.first));
+    if (!ok) _toast('কল খোলা যায়নি');
+  }
+
+  Future<void> _roWa(BloodListEntry e) async {
+    if (e.phones.isEmpty) return;
+    await _waTo(e.phones.first, text: 'রক্ত দরকার: ${_r.patientName}');
+  }
+
   void _toast(String msg) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -280,10 +324,16 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('রিকোয়েস্টের বিস্তারিত', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'রিকোয়েস্টের বিস্তারিত',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                     const Spacer(),
                     IconButton(
                       tooltip: 'ডোনারদের সাথে চ্যাট',
@@ -319,21 +369,28 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                         stream: RequestService.instance.donorsStream(),
                         builder: (context, snap) {
                           final all = snap.data ?? const <Donor>[];
-                          final matches = all
-                              .map((d) => _SmartEntry(
-                                    donor: d,
-                                    score: MatchScorer.compute(
-                                      receiverGroup: r.bloodGroup,
-                                      donorGroup: d.bloodGroup,
-                                      distanceKm: d.distanceKm,
-                                      available: d.status == DonorStatus.available,
-                                      verified: d.verified,
-                                      donations: d.donations,
+                          final matches =
+                              all
+                                  .map(
+                                    (d) => _SmartEntry(
+                                      donor: d,
+                                      score: MatchScorer.compute(
+                                        receiverGroup: r.bloodGroup,
+                                        donorGroup: d.bloodGroup,
+                                        distanceKm: d.distanceKm,
+                                        available:
+                                            d.status == DonorStatus.available,
+                                        verified: d.verified,
+                                        donations: d.donations,
+                                      ),
                                     ),
-                                  ))
-                              .where((e) => e.score.compatible)
-                              .toList()
-                            ..sort((a, b) => b.score.total.compareTo(a.score.total));
+                                  )
+                                  .where((e) => e.score.compatible)
+                                  .toList()
+                                ..sort(
+                                  (a, b) =>
+                                      b.score.total.compareTo(a.score.total),
+                                );
 
                           if (matches.isEmpty) {
                             return const SizedBox.shrink();
@@ -344,13 +401,26 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                             children: [
                               Row(
                                 children: [
-                                  const Icon(Icons.bolt, color: AppColors.gold, size: 18),
+                                  const Icon(
+                                    Icons.bolt,
+                                    color: AppColors.gold,
+                                    size: 18,
+                                  ),
                                   const SizedBox(width: 6),
-                                  const Text('স্মার্ট ম্যাচ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                                  const Text(
+                                    'স্মার্ট ম্যাচ',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
                                   const SizedBox(width: 8),
                                   Text(
                                     '${r.bloodGroup} জন্য সেরা ডোনার',
-                                    style: TextStyle(color: AppColors.textSecondary, fontSize: 11.5),
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 11.5,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -365,11 +435,15 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                                       score: e.score.total,
                                       onCall: () => _callDonor(e.donor),
                                       onChat: _openChat,
-                                      onWhatsApp: _waOk &&
+                                      onWhatsApp:
+                                          _waOk &&
                                               e.donor.phone.isNotEmpty &&
                                               e.donor.showPhone
-                                          ? () => _waTo(e.donor.phone,
-                                              text: 'রক্ত দরকার: ${r.patientName}')
+                                          ? () => _waTo(
+                                              e.donor.phone,
+                                              text:
+                                                  'রক্ত দরকার: ${r.patientName}',
+                                            )
                                           : null,
                                     ),
                                   ),
@@ -378,6 +452,8 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                           );
                         },
                       ),
+                      const SizedBox(height: 20),
+                      _rosterSuggestions(r),
                     ],
                   ),
                 ),
@@ -386,6 +462,64 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _rosterSuggestions(BloodRequest r) {
+    return StreamBuilder<List<BloodListEntry>>(
+      stream: BloodListService.instance.entriesStream(),
+      builder: (context, snap) {
+        final all = snap.data ?? const <BloodListEntry>[];
+        final compatible =
+            BloodCompat.compatibleDonorsFor[r.bloodGroup] ?? const [];
+        final matches = all
+            .where((e) => compatible.contains(e.bloodGroup))
+            .take(3)
+            .toList();
+        if (matches.isEmpty) return const SizedBox.shrink();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(
+                  Icons.format_list_numbered_rounded,
+                  color: AppColors.info,
+                  size: 18,
+                ),
+                const SizedBox(width: 6),
+                const Text(
+                  'রক্তদাতা তালিকা থেকে পরামর্শ',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
+            const SizedBox(height: 3),
+            Padding(
+              padding: const EdgeInsets.only(left: 24, bottom: 10),
+              child: Text(
+                '${r.bloodGroup} (কম্প্যাটিবল) — ভেরিফাইড প্রথমে',
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 11.5,
+                ),
+              ),
+            ),
+            for (final e in matches)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _SuggestedRosterTile(
+                  entry: e,
+                  onCall: () => _roCall(e),
+                  onWa: _waOk ? () => _roWa(e) : null,
+                  onViewAll: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const BloodListScreen()),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 
@@ -401,7 +535,11 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           end: Alignment.bottomRight,
         ),
         boxShadow: [
-          BoxShadow(color: r.urgency.color.withValues(alpha: 0.35), blurRadius: 30, offset: const Offset(0, 12)),
+          BoxShadow(
+            color: r.urgency.color.withValues(alpha: 0.35),
+            blurRadius: 30,
+            offset: const Offset(0, 12),
+          ),
         ],
       ),
       child: Column(
@@ -416,11 +554,17 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.16),
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.25),
+                  ),
                 ),
                 child: Text(
                   r.bloodGroup,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 17),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 17,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -428,11 +572,21 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(r.patientName, style: const TextStyle(color: Colors.white, fontSize: 19, fontWeight: FontWeight.w800)),
+                    Text(
+                      r.patientName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                     const SizedBox(height: 3),
                     Text(
                       '${r.bags} ব্যাগ প্রয়োজন • ${_fmtDateTime(r.neededBy)}',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 12.5),
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.85),
+                        fontSize: 12.5,
+                      ),
                     ),
                   ],
                 ),
@@ -449,13 +603,21 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.water_drop, color: confirmed >= r.bags ? AppColors.normal : Colors.white, size: 15),
+                Icon(
+                  Icons.water_drop,
+                  color: confirmed >= r.bags ? AppColors.normal : Colors.white,
+                  size: 15,
+                ),
                 const SizedBox(width: 6),
                 Text(
                   confirmed >= r.bags
                       ? 'ব্যাগ পূর্ণ ✓'
                       : '$confirmed/${r.bags} ব্যাগ রিজার্ভড',
-                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ],
             ),
@@ -474,20 +636,30 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
                   r.urgency.label,
-                  style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
               const Spacer(),
               Text(
                 '${r.responseCount} জন সাড়া দিয়েছেন',
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 12),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.85),
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -509,11 +681,18 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         Row(
           children: [
             const Expanded(
-              child: Text('আপনার প্রতিক্রিয়া', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+              child: Text(
+                'আপনার প্রতিক্রিয়া',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
             ),
             Text(
               '${donors.length} জন ডোনার',
-              style: const TextStyle(color: AppColors.primary, fontSize: 12.5, fontWeight: FontWeight.w700),
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontSize: 12.5,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),
@@ -525,7 +704,10 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         ],
         if (donors.isNotEmpty) ...[
           const SizedBox(height: 16),
-          const Text('যাঁরা সাড়া দিয়েছেন', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+          const Text(
+            'যাঁরা সাড়া দিয়েছেন',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 10),
           for (final d in donors.take(8))
             _ResponderTile(
@@ -537,8 +719,10 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
               waAvailable: _waOk,
               onConfirm: () => _confirmDonor(d),
               onTapProfile: () => _openProfile(d.uid),
-              onWhatsApp: () => _waTo(d.phone,
-                  text: 'রক্ত দরকার: ${r.patientName} — BloodLink'),
+              onWhatsApp: () => _waTo(
+                d.phone,
+                text: 'রক্ত দরকার: ${r.patientName} — BloodLink',
+              ),
             ),
         ],
       ],
@@ -560,7 +744,11 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.verified_rounded, size: 18, color: AppColors.normal),
+            const Icon(
+              Icons.verified_rounded,
+              size: 18,
+              color: AppColors.normal,
+            ),
             const SizedBox(width: 8),
             Text(
               _busy ? 'হচ্ছে...' : 'রক্ত সম্পন্ন — রিকোয়েস্ট বন্ধ করুন',
@@ -588,7 +776,11 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.check_circle_rounded, color: AppColors.normal, size: 22),
+          const Icon(
+            Icons.check_circle_rounded,
+            color: AppColors.normal,
+            size: 22,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -602,7 +794,10 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                   const SizedBox(height: 3),
                   Text(
                     'ডোনার: $name',
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12.5,
+                    ),
                   ),
                 ],
               ],
@@ -628,7 +823,11 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         children: [
           Row(
             children: [
-              const Icon(Icons.timer_off_rounded, color: AppColors.critical, size: 20),
+              const Icon(
+                Icons.timer_off_rounded,
+                color: AppColors.critical,
+                size: 20,
+              ),
               const SizedBox(width: 10),
               const Expanded(
                 child: Text(
@@ -643,7 +842,10 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
             r.rebroadcastCount > 0
                 ? '${r.rebroadcastCount} বার পুনরায় পাঠানো হয়েছে'
                 : 'আর সাড়া দেওয়া যাবে না',
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 12.5,
+            ),
           ),
           if (amOwner) ...[
             const SizedBox(height: 12),
@@ -684,7 +886,11 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
         children: [
           _row(Icons.local_hospital_outlined, 'হাসপাতাল', r.hospital),
           const SizedBox(height: 12),
-          _row(Icons.place_outlined, 'এলাকা', '${r.area} • ${r.distanceKm.toStringAsFixed(1)} km'),
+          _row(
+            Icons.place_outlined,
+            'এলাকা',
+            '${r.area} • ${r.distanceKm.toStringAsFixed(1)} km',
+          ),
           const SizedBox(height: 12),
           _row(Icons.bloodtype_outlined, 'রক্তের গ্রুপ', r.bloodGroup),
           if (r.requesterName.isNotEmpty) ...[
@@ -710,8 +916,10 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                       icon: Icons.chat_rounded,
                       color: AppColors.normal,
                       label: 'WhatsApp',
-                      onTap: () => _waTo(r.requesterPhone,
-                          text: 'রক্ত দরকার: ${r.patientName} — BloodLink'),
+                      onTap: () => _waTo(
+                        r.requesterPhone,
+                        text: 'রক্ত দরকার: ${r.patientName} — BloodLink',
+                      ),
                     ),
                   ),
                 ],
@@ -780,7 +988,10 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           child: Icon(icon, size: 19, color: AppColors.primary),
         ),
         const SizedBox(width: 12),
-        Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+        Text(
+          label,
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+        ),
         const Spacer(),
         Flexible(
           child: Text(
@@ -796,16 +1007,44 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
   Widget _actionButtons(String? myStatus, {required bool enabled}) {
     return Row(
       children: [
-        _respButton('donate', 'ডোনেট করব', Icons.favorite_rounded, AppColors.normal, myStatus == 'donate', enabled),
+        _respButton(
+          'donate',
+          'ডোনেট করব',
+          Icons.favorite_rounded,
+          AppColors.normal,
+          myStatus == 'donate',
+          enabled,
+        ),
         const SizedBox(width: 10),
-        _respButton('maybe', 'হয়তো', Icons.help_outline_rounded, AppColors.urgent, myStatus == 'maybe', enabled),
+        _respButton(
+          'maybe',
+          'হয়তো',
+          Icons.help_outline_rounded,
+          AppColors.urgent,
+          myStatus == 'maybe',
+          enabled,
+        ),
         const SizedBox(width: 10),
-        _respButton('cant', 'পারব না', Icons.close_rounded, AppColors.critical, myStatus == 'cant', enabled),
+        _respButton(
+          'cant',
+          'পারব না',
+          Icons.close_rounded,
+          AppColors.critical,
+          myStatus == 'cant',
+          enabled,
+        ),
       ],
     );
   }
 
-  Widget _respButton(String status, String label, IconData icon, Color color, bool active, bool enabled) {
+  Widget _respButton(
+    String status,
+    String label,
+    IconData icon,
+    Color color,
+    bool active,
+    bool enabled,
+  ) {
     return Expanded(
       child: GestureDetector(
         onTap: (enabled && !_busy) ? () => _respond(status) : null,
@@ -815,13 +1054,20 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
           decoration: BoxDecoration(
             color: active ? color.withValues(alpha: 0.2) : AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: active ? color : AppColors.border, width: active ? 1.6 : 1),
+            border: Border.all(
+              color: active ? color : AppColors.border,
+              width: active ? 1.6 : 1,
+            ),
           ),
           child: Opacity(
             opacity: enabled ? 1 : 0.45,
             child: Column(
               children: [
-                Icon(icon, color: active ? color : AppColors.textSecondary, size: 20),
+                Icon(
+                  icon,
+                  color: active ? color : AppColors.textSecondary,
+                  size: 20,
+                ),
                 const SizedBox(height: 6),
                 Text(
                   label,
@@ -878,7 +1124,9 @@ class _ResponderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = response.status == 'donate' ? AppColors.normal : AppColors.urgent;
+    final color = response.status == 'donate'
+        ? AppColors.normal
+        : AppColors.urgent;
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -903,11 +1151,18 @@ class _ResponderTile extends StatelessWidget {
                   Text(
                     response.name,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   Text(
                     response.status == 'donate' ? 'ডোনেট করবেন' : 'হয়তো',
-                    style: TextStyle(color: color, fontSize: 11.5, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),
@@ -917,7 +1172,10 @@ class _ResponderTile extends StatelessWidget {
             GestureDetector(
               onTap: onConfirm,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.normal.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
@@ -926,7 +1184,11 @@ class _ResponderTile extends StatelessWidget {
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.check_circle_outline, size: 15, color: AppColors.normal),
+                    Icon(
+                      Icons.check_circle_outline,
+                      size: 15,
+                      color: AppColors.normal,
+                    ),
                     SizedBox(width: 5),
                     Text(
                       'কনফার্ম',
@@ -947,11 +1209,15 @@ class _ResponderTile extends StatelessWidget {
               icon: Icons.phone_in_talk,
               color: AppColors.normal,
               onTap: () async {
-                final ok = await launchUrl(ContactService.instance.callUri(response.phone));
+                final ok = await launchUrl(
+                  ContactService.instance.callUri(response.phone),
+                );
                 if (!ok && context.mounted) {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
-                    ..showSnackBar(const SnackBar(content: Text('কল খোলা যায়নি')));
+                    ..showSnackBar(
+                      const SnackBar(content: Text('কল খোলা যায়নি')),
+                    );
                 }
               },
             ),
@@ -970,7 +1236,8 @@ class _ResponderTile extends StatelessWidget {
             tooltip: 'মেসেজ (লক করা আছে)',
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => ChatScreen(requestId: requestId, title: requestTitle),
+                builder: (_) =>
+                    ChatScreen(requestId: requestId, title: requestTitle),
               ),
             ),
           ),
@@ -981,7 +1248,12 @@ class _ResponderTile extends StatelessWidget {
 }
 
 class _RoundAction extends StatelessWidget {
-  const _RoundAction({required this.icon, required this.color, this.onTap, this.tooltip});
+  const _RoundAction({
+    required this.icon,
+    required this.color,
+    this.onTap,
+    this.tooltip,
+  });
 
   final IconData icon;
   final Color color;
@@ -1005,6 +1277,144 @@ class _RoundAction extends StatelessWidget {
           ),
           child: Icon(icon, size: 17, color: color),
         ),
+      ),
+    );
+  }
+}
+
+class _SuggestedRosterTile extends StatelessWidget {
+  const _SuggestedRosterTile({
+    required this.entry,
+    required this.onCall,
+    required this.onViewAll,
+    this.onWa,
+  });
+
+  final BloodListEntry entry;
+  final VoidCallback onCall;
+  final VoidCallback? onWa;
+  final VoidCallback onViewAll;
+
+  @override
+  Widget build(BuildContext context) {
+    final e = entry;
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.surface.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: AppColors.info.withValues(alpha: 0.14),
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
+              style: const TextStyle(
+                color: AppColors.info,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        e.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    if (e.verified) ...[
+                      const SizedBox(width: 6),
+                      const Icon(
+                        Icons.verified_rounded,
+                        color: AppColors.normal,
+                        size: 14,
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  e.area.isEmpty ? e.bloodGroup : '${e.area} · ${e.bloodGroup}',
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: onCall,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
+              decoration: BoxDecoration(
+                color: AppColors.normal.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.phone_in_talk,
+                color: AppColors.normal,
+                size: 16,
+              ),
+            ),
+          ),
+          if (onWa != null) ...[
+            const SizedBox(width: 6),
+            GestureDetector(
+              onTap: onWa,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 11,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.info.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.chat_rounded,
+                  color: AppColors.info,
+                  size: 16,
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(width: 6),
+          GestureDetector(
+            onTap: onViewAll,
+            child: Container(
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceHigh,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textSecondary,
+                size: 16,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

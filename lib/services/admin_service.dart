@@ -51,6 +51,18 @@ class AdminService {
     }
   }
 
+  /// অ্যাডমিন ও ম্যানেজার UID তালিকা — ব্যাজ (badge) দেখানোর জন্য।
+  Future<({List<String> admins, List<String> managers})> fetchRoles() async {
+    final data = await fetchMeta() ?? const <String, dynamic>{};
+    final admins = ((data['admins'] as List<dynamic>?) ?? const [])
+        .whereType<String>()
+        .toList();
+    final managers = ((data['managers'] as List<dynamic>?) ?? const [])
+        .whereType<String>()
+        .toList();
+    return (admins: admins, managers: managers);
+  }
+
   Future<({bool ok, String message})> saveAppMeta({
     bool? forceClose,
     String? forceMessage,
@@ -78,9 +90,7 @@ class AdminService {
 
   Stream<List<AppUser>> allUsersStream() {
     return _db.collection('users').snapshots().map((snap) {
-      return snap.docs
-          .map((d) => AppUser.fromJson(d.data()))
-          .toList()
+      return snap.docs.map((d) => AppUser.fromJson(d.data())).toList()
         ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     });
   }
@@ -91,16 +101,16 @@ class AdminService {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snap) {
-      final list = snap.docs
-          .map((d) => BloodRequest.fromJson(d.data()))
-          .toList()
-        ..sort((a, b) {
-          final aActive = a.status == 'active' ? 0 : 1;
-          final bActive = b.status == 'active' ? 0 : 1;
-          return aActive.compareTo(bActive);
-        });
-      return list;
-    }).handleError((Object _) => <BloodRequest>[]);
+          final list =
+              snap.docs.map((d) => BloodRequest.fromJson(d.data())).toList()
+                ..sort((a, b) {
+                  final aActive = a.status == 'active' ? 0 : 1;
+                  final bActive = b.status == 'active' ? 0 : 1;
+                  return aActive.compareTo(bActive);
+                });
+          return list;
+        })
+        .handleError((Object _) => <BloodRequest>[]);
   }
 
   Future<bool> closeRequest(String requestId) async {

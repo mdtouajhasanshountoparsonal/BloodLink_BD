@@ -23,14 +23,33 @@ class _BloodListScreenState extends State<BloodListScreen> {
   bool _isManager = false;
   bool _waOk = false;
   String _filter = 'সব';
+  List<String> _adminUids = const [];
+  List<String> _managerUids = const [];
 
   @override
   void initState() {
     super.initState();
     _load();
+    _loadRoles();
     ContactService.instance.whatsappInstalled().then((ok) {
       if (mounted) setState(() => _waOk = ok);
     });
+  }
+
+  Future<void> _loadRoles() async {
+    final r = await AdminService.instance.fetchRoles();
+    if (!mounted) return;
+    setState(() {
+      _adminUids = r.admins;
+      _managerUids = r.managers;
+    });
+  }
+
+  String? _roleOf(String uid) {
+    if (uid.isEmpty) return null;
+    if (_adminUids.contains(uid)) return 'admin';
+    if (_managerUids.contains(uid)) return 'manager';
+    return null;
   }
 
   Future<void> _load() async {
@@ -149,7 +168,7 @@ class _BloodListScreenState extends State<BloodListScreen> {
                 child: Text(
                   _canWrite
                       ? 'নাম ও একাধিক নম্বর যোগ করুন; অ্যাডমিন ভেরিফাই করতে পারেন।'
-                      : 'যেকোনো রক্তদাতার সাথে কল/WhatsApp-এ যোগাযোগ করতে পারবেন।',
+                      : 'ব্যাজ দেখলে বোঝা যায় কে অ্যাডমিন, কে ম্যানেজার, কে ভেরিফাইড।',
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 12.5,
@@ -291,8 +310,35 @@ class _BloodListScreenState extends State<BloodListScreen> {
                           fontWeight: FontWeight.w800,
                         ),
                       ),
+                      if (_roleOf(e.addedBy) != null || e.verified) ...[
+                        const SizedBox(height: 5),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            if (_roleOf(e.addedBy) == 'admin')
+                              _badgeChip(
+                                label: 'অ্যাডমিন',
+                                color: AppColors.gold,
+                                icon: Icons.shield_outlined,
+                              ),
+                            if (_roleOf(e.addedBy) == 'manager')
+                              _badgeChip(
+                                label: 'ম্যানেজার',
+                                color: AppColors.info,
+                                icon: Icons.admin_panel_settings_outlined,
+                              ),
+                            if (e.verified)
+                              _badgeChip(
+                                label: 'ভেরিফাইড',
+                                color: AppColors.normal,
+                                icon: Icons.verified_rounded,
+                              ),
+                          ],
+                        ),
+                      ],
                       if (e.area.isNotEmpty) ...[
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 4),
                         Text(
                           e.area,
                           style: const TextStyle(
@@ -486,6 +532,36 @@ class _BloodListScreenState extends State<BloodListScreen> {
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+
+  Widget _badgeChip({
+    required String label,
+    required Color color,
+    required IconData icon,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.13),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: color),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
         ],
       ),
     );
