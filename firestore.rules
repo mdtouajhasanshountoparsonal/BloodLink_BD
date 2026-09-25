@@ -16,6 +16,14 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/appMeta/main).data.admins.hasAny([request.auth.uid]);
     }
 
+    // ম্যানেজার (কো-অ্যাডমিন): admins বা appMeta/main.managers অ্যারেতে uid
+    function manager() {
+      return request.auth != null && (
+        admin()
+        || get(/databases/$(database)/documents/appMeta/main).data.managers.hasAny([request.auth.uid])
+      );
+    }
+
     // মেয়াদোত্তীর্ণ রিকোয়েস্ট শুধু 'expired' অবস্থায় বন্ধ করা যায়
     function canAutoExpire() {
       return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'closedAt', 'closedBy'])
@@ -133,10 +141,30 @@ service cloud.firestore {
     }
 
     // ---------- App meta (update notice / force close) ----------
-    // প্রশাসক রাখেন: latestVersion, downloadUrl, notice, forceClose, forceMessage, admins
+    // প্রশাসক রাখেন: latestVersion, downloadUrl, notice, forceClose, forceMessage, admins, managers
     match /appMeta/{docId} {
       allow read: if true;
       allow update, delete: if admin();
+    }
+
+    // ---------- Blood donation list (roster) ----------
+    // সবাই দেখে ও যোগাযোগ করে; ম্যানেজার যোগ/মুছে; অ্যাডমিন নম্বর ভেরিফাই করে
+    match /bloodList/{entryId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && manager()
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.phones is list
+        && request.resource.data.phones.size() > 0;
+      // ম্যানেজার সাধারণ ফিল্ড বদলাতে পারে; 'verified' টগল কেবল অ্যাডমিন
+      allow update: if signedIn() && (
+        admin()
+        || (manager()
+          && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['verified'])
+          && request.resource.data.name is string
+          && request.resource.data.phones is list)
+      );
+      allow delete: if signedIn() && manager();
     }
   }
 }

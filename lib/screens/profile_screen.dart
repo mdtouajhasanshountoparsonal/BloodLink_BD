@@ -9,6 +9,7 @@ import '../widgets/background_decor.dart';
 import '../widgets/blood_group_chip.dart';
 import '../widgets/glass_card.dart';
 import 'admin_panel_screen.dart';
+import 'blood_list_screen.dart';
 import 'edit_profile_screen.dart';
 import 'help_screen.dart';
 import 'notification_settings_screen.dart';
@@ -148,6 +149,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.report_problem_outlined,
                         label: 'রিপোর্ট করুন',
                         onTap: () => _open(const ReportScreen()),
+                      ),
+                      const _Divider(),
+                      _MenuTile(
+                        icon: Icons.format_list_numbered_rounded,
+                        label: 'রক্তদাতা তালিকা',
+                        onTap: () => _open(const BloodListScreen()),
                       ),
                       const _Divider(),
                       _MenuTile(

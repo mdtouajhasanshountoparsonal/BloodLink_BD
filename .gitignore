@@ -24,5 +24,6 @@ firebase-debug.*.log
 .firebase/
 
 # Build junk
-build_log.txt
+build_log*.txt
 android/.kotlin/
+facebook_promo.png

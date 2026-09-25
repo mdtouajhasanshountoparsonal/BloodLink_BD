@@ -203,7 +203,7 @@ class _AppControlTabState extends State<_AppControlTab> {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'অন্য কাউকে অ্যাডমিন করতে Firebase Console → appMeta/main → admins অ্যারেতে তার UID বসান।',
+                  'অ্যাডমিন: Firebase Console → appMeta/main → admins অ্যারেতে UID বসান।\nম্যানেজার (কো-অ্যাডমিন, শুধু রক্তদাতা তালিকা চালায়): managers অ্যারেতে UID বসান।',
                   style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.5),
                 ),
               ],

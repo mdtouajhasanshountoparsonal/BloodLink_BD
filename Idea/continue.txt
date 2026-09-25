@@ -1,1 +1,1 @@
-Continue  opencode -s ses_f3798760efferynSMHSpHuGkwH
+Continue  opencode.exe -s ses_f3798760efferynSMHSpHuGkwH

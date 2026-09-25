@@ -27,6 +27,21 @@ class AdminService {
     }
   }
 
+  /// অ্যাডমিন বা ম্যানেজার (কো-অ্যাডমিন) — ম্যানেজার bloodList পরিচালনা করে।
+  Future<bool> isManager(AppUser? user) async {
+    if (user == null) return false;
+    try {
+      final snap = await _meta.get();
+      final data = snap.data();
+      final admins = (data?['admins'] as List<dynamic>?) ?? const [];
+      if (admins.any((a) => a == user.uid)) return true;
+      final managers = (data?['managers'] as List<dynamic>?) ?? const [];
+      return managers.any((a) => a == user.uid);
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<Map<String, dynamic>?> fetchMeta() async {
     try {
       final snap = await _meta.get();
