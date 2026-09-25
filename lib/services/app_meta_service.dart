@@ -50,9 +50,9 @@ class AppMetaService {
   AppMetaService._();
   static final AppMetaService instance = AppMetaService._();
 
-  static const String currentVersion = '0.1.0';
+  static const String currentVersion = '0.1.1';
   static const String defaultDownloadUrl =
-      'https://github.com/mdtouajhasanshountoparsonal/BloodLink_BD/releases/download/v0.1.0/BloodLink_v0.1.0.apk';
+      'https://github.com/mdtouajhasanshountoparsonal/BloodLink_BD/releases/download/v0.1.1/BloodLink_v0.1.1.apk';
   static const String portfolioUrl =
       'https://mdtouajhasanshountoparsonal.github.io/PORTFOLIO/';
 

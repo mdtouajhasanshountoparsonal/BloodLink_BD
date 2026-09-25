@@ -3,9 +3,9 @@
 
   /* ===================== সাইট কনফিগ (এক লাইনে বদলান) ===================== */
   const CONFIG = {
-    version: '0.1.0',
-    apkPath: 'https://github.com/mdtouajhasanshountoparsonal/BloodLink_BD/releases/download/v0.1.0/BloodLink_v0.1.0.apk',   // GitHub Release asset
-    releaseNotes: 'Release 0.1.0 — প্রথম পাবলিক ভার্সন। কাছের ডোনার, স্মার্ট ম্যাচ, কল/WhatsApp যোগাযোগ, ডোনেশন হিস্টরি ও ব্যাজ, ইন-অ্যাপ কোটা/আপডেট নোটিফিকেশন সংযোজিত।',
+    version: '0.1.1',
+    apkPath: 'https://github.com/mdtouajhasanshountoparsonal/BloodLink_BD/releases/download/v0.1.1/BloodLink_v0.1.1.apk',   // GitHub Release asset
+    releaseNotes: 'Release 0.1.1 — রক্তদাতা তালিকা সবার সামনে: হোমে লাইভ প্রিভিউ, গ্রুপ-ফিল্টারসহ পুরো তালিকা, রিকোয়েস্টে কম্প্যাটিবল রক্তদাতার অটো-পরামর্শ, অ্যাডমিন/ম্যানেজার/ভেরিফাইড ব্যাজ।',
   };
 
   document.getElementById('ver').textContent = CONFIG.version;
