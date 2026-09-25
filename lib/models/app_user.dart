@@ -53,19 +53,19 @@ class AppUser {
   }
 
   Map<String, dynamic> toJson() => {
-        'uid': uid,
-        'email': email,
-        'name': name,
-        'bloodGroup': bloodGroup,
-        'phone': phone,
-        'isDonor': isDonor,
-        'verified': verified,
-        'donations': donations,
-        'available': available,
-        'latitude': latitude,
-        'longitude': longitude,
-        'lastDonation': lastDonation,
-        'showPhone': showPhone,
-        'banned': banned,
-      };
+    'uid': uid,
+    'email': email,
+    'name': name,
+    'bloodGroup': bloodGroup,
+    'phone': phone,
+    'isDonor': isDonor,
+    'verified': verified,
+    'donations': donations,
+    'available': available,
+    'latitude': latitude,
+    'longitude': longitude,
+    'lastDonation': lastDonation,
+    'showPhone': showPhone,
+    'banned': banned,
+  };
 }

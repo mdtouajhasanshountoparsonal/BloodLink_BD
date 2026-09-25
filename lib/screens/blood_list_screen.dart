@@ -10,6 +10,8 @@ import '../theme/app_colors.dart';
 import '../utils/blood_compat.dart';
 import '../widgets/background_decor.dart';
 import '../widgets/glass_card.dart';
+import '../widgets/roster_swim.dart';
+import 'blood_list_detail_screen.dart';
 
 class BloodListScreen extends StatefulWidget {
   const BloodListScreen({super.key});
@@ -94,36 +96,6 @@ class _BloodListScreenState extends State<BloodListScreen> {
       builder: (_) => const _AddEntrySheet(),
     );
     if (mounted) _toast('রিফ্রেশ হচ্ছে…');
-  }
-
-  Future<void> _confirmDelete(BloodListEntry e) async {
-    final sure = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('মুছে ফেলবেন?'),
-        content: Text('"${e.name}" তালিকা থেকে মুছে ফেলা হবে।'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('না'),
-          ),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.critical),
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('মুছুন'),
-          ),
-        ],
-      ),
-    );
-    if (sure != true) return;
-    final res = await BloodListService.instance.deleteEntry(e.id);
-    _toast(res.message);
-  }
-
-  Future<void> _toggleVerified(BloodListEntry e) async {
-    final res = await BloodListService.instance.setVerified(e.id, !e.verified);
-    _toast(res.message);
   }
 
   @override
@@ -272,29 +244,43 @@ class _BloodListScreenState extends State<BloodListScreen> {
   }
 
   Widget _entryCard(BloodListEntry e) {
+    final role = _roleOf(e.addedBy);
+    final shortPhone = e.phones.isEmpty ? '' : e.phones.first;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: GlassCard(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
+        onTap: () =>
+            Navigator.of(context)
+                .push(bloodListEntryDetailRoute(e, role: role)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.14),
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w800,
+                Hero(
+                  tag: 'blood-avatar-${e.id}',
+                  child: SwimmingAvatar(
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.14),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.3),
+                          width: 1.2,
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -305,48 +291,38 @@ class _BloodListScreenState extends State<BloodListScreen> {
                     children: [
                       Text(
                         e.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 15,
+                          fontSize: 14.5,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      if (_roleOf(e.addedBy) != null || e.verified) ...[
-                        const SizedBox(height: 5),
-                        Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
-                          children: [
-                            if (_roleOf(e.addedBy) == 'admin')
-                              _badgeChip(
-                                label: 'অ্যাডমিন',
-                                color: AppColors.gold,
-                                icon: Icons.shield_outlined,
-                              ),
-                            if (_roleOf(e.addedBy) == 'manager')
-                              _badgeChip(
-                                label: 'ম্যানেজার',
-                                color: AppColors.info,
-                                icon: Icons.admin_panel_settings_outlined,
-                              ),
-                            if (e.verified)
-                              _badgeChip(
-                                label: 'ভেরিফাইড',
-                                color: AppColors.normal,
-                                icon: Icons.verified_rounded,
-                              ),
-                          ],
-                        ),
-                      ],
-                      if (e.area.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          e.area,
-                          style: const TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
+                      const SizedBox(height: 4),
+                      Wrap(
+                        spacing: 5,
+                        runSpacing: 4,
+                        children: [
+                          if (role == 'admin')
+                            _badgeChip(
+                              label: 'অ্যাডমিন',
+                              color: AppColors.gold,
+                              icon: Icons.shield_outlined,
+                            ),
+                          if (role == 'manager')
+                            _badgeChip(
+                              label: 'ম্যানেজার',
+                              color: AppColors.info,
+                              icon: Icons.admin_panel_settings_outlined,
+                            ),
+                          if (e.verified)
+                            _badgeChip(
+                              label: 'ভেরিফাইড',
+                              color: AppColors.normal,
+                              icon: Icons.verified_rounded,
+                            ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -374,165 +350,128 @@ class _BloodListScreenState extends State<BloodListScreen> {
                   ),
               ],
             ),
-            const SizedBox(height: 10),
-            for (final phone in e.phones) _phoneRow(e, phone),
-            if (e.phones.isEmpty)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4),
-                child: Text(
-                  'নম্বর দেওয়া নেই',
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            if (e.email.isNotEmpty) ...[
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.mail_outline_rounded,
-                    size: 15,
-                    color: AppColors.textSecondary,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      e.email,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            if (e.note.isNotEmpty) ...[
-              const SizedBox(height: 6),
-              Text(
-                e.note,
-                style: const TextStyle(
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Icon(
+                  Icons.place_rounded,
+                  size: 14,
                   color: AppColors.textSecondary,
-                  fontSize: 12,
-                  height: 1.4,
                 ),
-              ),
-            ],
-            if (_canWrite) ...[
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  if (_isAdmin)
-                    Expanded(
-                      child: _tinyAction(
-                        icon: e.verified
-                            ? Icons.verified_rounded
-                            : Icons.gpp_maybe_outlined,
-                        label: e.verified ? 'ভেরিফাইড' : 'ভেরিফাই করুন',
-                        color: AppColors.normal,
-                        onTap: () => _toggleVerified(e),
-                      ),
-                    ),
-                  Expanded(
-                    child: _tinyAction(
-                      icon: Icons.delete_outline_rounded,
-                      label: 'মুছুন',
-                      color: AppColors.critical,
-                      onTap: () => _confirmDelete(e),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    e.area.isEmpty
+                        ? (shortPhone.isEmpty
+                              ? 'ঠিকানা দেওয়া নেই'
+                              : shortPhone)
+                        : (shortPhone.isEmpty
+                              ? e.area
+                              : '${e.area} · $shortPhone'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 11.5,
                     ),
                   ),
+                ),
+                if (role != null || e.verified)
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    size: 17,
+                    color: AppColors.textSecondary,
+                  ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                if (shortPhone.isNotEmpty) ...[
+                  _quickBtn(
+                    icon: Icons.phone_in_talk,
+                    label: 'কল',
+                    color: AppColors.normal,
+                    onTap: () => _call(shortPhone),
+                  ),
+                  if (_waOk) ...[
+                    const SizedBox(width: 6),
+                    _quickBtn(
+                      icon: Icons.chat_rounded,
+                      label: 'WhatsApp',
+                      color: AppColors.info,
+                      onTap: () => _wa(shortPhone),
+                    ),
+                  ],
                 ],
-              ),
-            ],
+                if (e.email.isNotEmpty) ...[
+                  const SizedBox(width: 6),
+                  _quickBtn(
+                    icon: Icons.send_outlined,
+                    label: 'ইমেইল',
+                    color: AppColors.gold,
+                    onTap: () => _email(e.email),
+                  ),
+                ],
+                if (shortPhone.isEmpty && e.email.isEmpty)
+                  const Text(
+                    'যোগাযোগের তথ্য নেই',
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 11.5,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            IgnorePointer(
+              child: WaterRipple(color: AppColors.primary, height: 7),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _phoneRow(BloodListEntry e, String phone) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        children: [
-          if (e.verified)
-            const Padding(
-              padding: EdgeInsets.only(right: 6),
-              child: Icon(
-                Icons.verified_rounded,
-                color: AppColors.normal,
-                size: 15,
-              ),
-            ),
-          Expanded(
-            child: Text(
-              phone,
-              style: const TextStyle(
-                fontSize: 13.5,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'monospace',
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => _call(phone),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-              decoration: BoxDecoration(
-                color: AppColors.normal.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.phone_in_talk, size: 14, color: AppColors.normal),
-                  SizedBox(width: 4),
-                  Text(
-                    'কল',
-                    style: TextStyle(
-                      color: AppColors.normal,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (_waOk) ...[
-            const SizedBox(width: 6),
-            GestureDetector(
-              onTap: () => _wa(phone),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.info.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.chat_rounded, size: 14, color: AppColors.info),
-                    SizedBox(width: 4),
-                    Text(
-                      'WhatsApp',
-                      style: TextStyle(
-                        color: AppColors.info,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
+  Future<void> _email(String email) async {
+    final uri = ContactService.instance.mailUri(
+      email,
+      subject: 'রক্ত দরকার — BloodLink BD',
+      body: 'আসসালামু আলাইকুম,\n\nরক্ত দরকার এমন পরিস্থিতিতে BloodLink BD অ্যাপের তালিকা থেকে আপনার ইমেইল পেয়েছি।',
+    );
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!ok) _toast('ইমেইল অ্যাপ খোলা যায়নি');
+  }
+
+  Widget _quickBtn({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: color),
+            const SizedBox(width: 5),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
               ),
             ),
           ],
-        ],
+        ),
       ),
     );
   }
@@ -563,42 +502,6 @@ class _BloodListScreenState extends State<BloodListScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _tinyAction({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 14, color: color),
-            const SizedBox(width: 5),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

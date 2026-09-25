@@ -20,8 +20,7 @@ class AppMeta {
   final String notice;
   final String downloadUrl;
 
-  bool get hasUpdate =>
-      _isNewer(latestVersion, AppMetaService.currentVersion);
+  bool get hasUpdate => _isNewer(latestVersion, AppMetaService.currentVersion);
 
   static bool _isNewer(String a, String b) {
     final pa = _parts(a);
@@ -34,7 +33,10 @@ class AppMeta {
   }
 
   static List<int> _parts(String v) {
-    final list = v.split(RegExp(r'[^0-9]+')).where((s) => s.isNotEmpty).toList();
+    final list = v
+        .split(RegExp(r'[^0-9]+'))
+        .where((s) => s.isNotEmpty)
+        .toList();
     final out = <int>[];
     for (final s in list.take(3)) {
       out.add(int.tryParse(s) ?? 0);
@@ -63,7 +65,10 @@ class AppMetaService {
       final data = snap.data() ?? <String, dynamic>{};
       final meta = AppMeta(
         forceClose: (data['forceClose'] ?? false) as bool,
-        forceMessage: (data['forceMessage'] ?? 'অ্যাপটি বন্ধ করা হয়েছে। পরে আবার চেষ্টা করুন।') as String,
+        forceMessage:
+            (data['forceMessage'] ??
+                    'অ্যাপটি বন্ধ করা হয়েছে। পরে আবার চেষ্টা করুন।')
+                as String,
         latestVersion: (data['latestVersion'] ?? currentVersion) as String,
         notice: (data['notice'] ?? 'নতুন ভার্সন পাওয়া গেছে') as String,
         downloadUrl: (data['downloadUrl'] ?? defaultDownloadUrl) as String,

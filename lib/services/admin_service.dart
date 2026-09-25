@@ -70,6 +70,7 @@ class AdminService {
     String? downloadUrl,
     String? notice,
     List<String>? admins,
+    List<String>? managers,
   }) async {
     try {
       final data = <String, dynamic>{
@@ -79,6 +80,7 @@ class AdminService {
         'downloadUrl': ?downloadUrl,
         'notice': ?notice,
         'admins': ?admins,
+        'managers': ?managers,
       };
       await _meta.set(data, SetOptions(merge: true));
       UsageCounter.instance.trackWrite('appMeta');

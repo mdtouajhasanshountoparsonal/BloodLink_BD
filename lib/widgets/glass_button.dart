@@ -39,8 +39,9 @@ class GlassButton extends StatelessWidget {
           gradient: gradient ?? defaultGradient,
           boxShadow: [
             BoxShadow(
-              color: (gradient == null ? AppColors.primary : AppColors.primarySoft)
-                  .withValues(alpha: 0.35),
+              color:
+                  (gradient == null ? AppColors.primary : AppColors.primarySoft)
+                      .withValues(alpha: 0.35),
               blurRadius: 22,
               offset: const Offset(0, 8),
             ),

@@ -22,10 +22,16 @@ class DonationInfoScreen extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('রক্তদানের উপকারিতা', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'রক্তদানের উপকারিতা',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
               ),
@@ -78,25 +84,37 @@ class DonationInfoScreen extends StatelessWidget {
                         title: 'ডোনেট করতে কে পারবেন?',
                       ),
                       SizedBox(height: 12),
-                      GlassCard(child: Text(
-                        '• বয়স ১৮–৬০ বছর\n'
-                        '• শরীরের ওজন ৪৫ কেজি বা তার বেশি\n'
-                        '• হিমোগ্লোবিন ১২.৫ g/dL এর বেশি\n'
-                        '• শেষ রক্তদানের ৩ মাস পার হয়েছে\n'
-                        '• ফ্লু/সর্দি বা অন্য সংক্রমণ নেই\n'
-                        '• খালি পেটে নয় — আগে খেয়ে আসুন',
-                        style: TextStyle(fontSize: 13, height: 1.7, color: AppColors.textPrimary),
-                      )),
+                      GlassCard(
+                        child: Text(
+                          '• বয়স ১৮–৬০ বছর\n'
+                          '• শরীরের ওজন ৪৫ কেজি বা তার বেশি\n'
+                          '• হিমোগ্লোবিন ১২.৫ g/dL এর বেশি\n'
+                          '• শেষ রক্তদানের ৩ মাস পার হয়েছে\n'
+                          '• ফ্লু/সর্দি বা অন্য সংক্রমণ নেই\n'
+                          '• খালি পেটে নয় — আগে খেয়ে আসুন',
+                          style: TextStyle(
+                            fontSize: 13,
+                            height: 1.7,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 22),
                       _SectionTitle(
                         icon: Icons.verified_rounded,
                         title: 'মনে রাখুন',
                       ),
                       SizedBox(height: 12),
-                      GlassCard(child: Text(
-                        'ভালো ব্যাংকের মতোই, সঠিক সময়ে সঠিক গ্রুপের রক্ত না পেলে জীবন চলে যায়। আপনার সর্বশেষ রক্তদান কারও বাবার, কারও মায়ের বা সন্তানের জীবন বাঁচাতে পারে।',
-                        style: TextStyle(fontSize: 13, height: 1.7, color: AppColors.textPrimary),
-                      )),
+                      GlassCard(
+                        child: Text(
+                          'ভালো ব্যাংকের মতোই, সঠিক সময়ে সঠিক গ্রুপের রক্ত না পেলে জীবন চলে যায়। আপনার সর্বশেষ রক্তদান কারও বাবার, কারও মায়ের বা সন্তানের জীবন বাঁচাতে পারে।',
+                          style: TextStyle(
+                            fontSize: 13,
+                            height: 1.7,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -148,7 +166,11 @@ class _HeroBanner extends StatelessWidget {
           SizedBox(height: 6),
           Text(
             'রক্তদান শুধু অন্যের জন্যই নয় — আপনার শরীরের জন্যও উপকারী। এক ডোনেশনে আপনি ৩ জনের জীবন বাঁচাতে পারেন।',
-            style: TextStyle(color: Colors.white70, fontSize: 13.5, height: 1.5),
+            style: TextStyle(
+              color: Colors.white70,
+              fontSize: 13.5,
+              height: 1.5,
+            ),
           ),
         ],
       ),
@@ -168,7 +190,10 @@ class _SectionTitle extends StatelessWidget {
       children: [
         Icon(icon, color: AppColors.critical, size: 19),
         const SizedBox(width: 8),
-        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+        Text(
+          title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+        ),
       ],
     );
   }
@@ -209,12 +234,19 @@ class _FactTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   body,
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5, height: 1.55),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12.5,
+                    height: 1.55,
+                  ),
                 ),
               ],
             ),

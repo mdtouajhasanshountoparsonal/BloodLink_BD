@@ -18,7 +18,9 @@ import '../widgets/background_decor.dart';
 import '../widgets/glass_button.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/request_card.dart';
+import '../widgets/roster_swim.dart';
 import '../widgets/section_header.dart';
+import 'blood_list_detail_screen.dart';
 import 'blood_list_screen.dart';
 import 'new_request_screen.dart';
 import 'nearby_requests_screen.dart';
@@ -758,23 +760,29 @@ class _PreviewRow extends StatelessWidget {
     };
     return GlassCard(
       padding: const EdgeInsets.all(14),
-      onTap: () => _goBloodList(context),
+      onTap: () =>
+          Navigator.of(context).push(bloodListEntryDetailRoute(e, role: role)),
       child: Row(
         children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.14),
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
-              style: const TextStyle(
-                color: AppColors.primary,
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
+          Hero(
+            tag: 'blood-avatar-${e.id}',
+            child: SwimmingAvatar(
+              child: Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.14),
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
             ),
           ),

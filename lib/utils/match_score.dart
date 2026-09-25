@@ -65,7 +65,8 @@ class MatchScorer {
     // 5 max — বেশি ডোনেশন = বেশি অভিজ্ঞতা
     final experiencePoints = donations.clamp(0, 10) ~/ 2;
 
-    final total = groupPoints +
+    final total =
+        groupPoints +
         distancePoints +
         availabilityPoints +
         verifiedPoints +

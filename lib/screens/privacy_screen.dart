@@ -51,11 +51,16 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('প্রাইভেসি ও নিরাপত্তা',
-                        style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'প্রাইভেসি ও নিরাপত্তা',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
               ),
@@ -69,7 +74,11 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                       GlassCard(
                         child: Row(
                           children: [
-                            const Icon(Icons.phone_in_talk, color: AppColors.primary, size: 22),
+                            const Icon(
+                              Icons.phone_in_talk,
+                              color: AppColors.primary,
+                              size: 22,
+                            ),
                             const SizedBox(width: 14),
                             const Expanded(
                               child: Column(
@@ -77,12 +86,18 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                                 children: [
                                   Text(
                                     'ডোনারদের কাছে নম্বর দেখান',
-                                    style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w700),
+                                    style: TextStyle(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                   SizedBox(height: 4),
                                   Text(
                                     'বন্ধ করলে রোগী/ডোনাররা আপনার নম্বর দেখতে পারবে না, শুধু ইন-অ্যাপ চ্যাট করতে পারবে।',
-                                    style: TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 12.5,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -96,32 +111,60 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      const Text('যা আসলে শেয়ার হয়',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                      const Text(
+                        'যা আসলে শেয়ার হয়',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       GlassCard(
                         padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _infoRow('নাম ও রক্তের গ্রুপ', 'ডোনার লিস্ট ও রিকোয়েস্টে দেখানো হয়।'),
-                            _infoRow('অবস্থান (এলাকা)', 'কাছের ডোনার খুঁজতে দূরত্ব হিসাব করা হয়।'),
-                            _infoRow('ডোনেশন সংখ্যা ও ভেরিফিকেশন', 'প্রোফাইলে সবাই দেখতে পায়।'),
-                            _infoRow('নম্বর', 'শুধু ভেরিফাইড ডোনার/রোগী দেখে — উপরের স্যুইচ দিয়ে নিয়ন্ত্রণ করুন।'),
+                            _infoRow(
+                              'নাম ও রক্তের গ্রুপ',
+                              'ডোনার লিস্ট ও রিকোয়েস্টে দেখানো হয়।',
+                            ),
+                            _infoRow(
+                              'অবস্থান (এলাকা)',
+                              'কাছের ডোনার খুঁজতে দূরত্ব হিসাব করা হয়।',
+                            ),
+                            _infoRow(
+                              'ডোনেশন সংখ্যা ও ভেরিফিকেশন',
+                              'প্রোফাইলে সবাই দেখতে পায়।',
+                            ),
+                            _infoRow(
+                              'নম্বর',
+                              'শুধু ভেরিফাইড ডোনার/রোগী দেখে — উপরের স্যুইচ দিয়ে নিয়ন্ত্রণ করুন।',
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 16),
-                      const Text('নিরাপত্তা টিপস',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                      const Text(
+                        'নিরাপত্তা টিপস',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       GlassCard(
                         padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _infoRow('ফোনে ওটিপি/পিন কাউকে জানাবেন না', 'সরকারি প্রতিষ্ঠান কখনো ফোনে পিন চায় না।'),
-                            _infoRow('ভুয়া নম্বর ভেরিফাই করতে বললে সতর্ক থাকুন', 'সন্দেহজনক হলে ইন-অ্যাপ রিপোর্ট করুন।'),
+                            _infoRow(
+                              'ফোনে ওটিপি/পিন কাউকে জানাবেন না',
+                              'সরকারি প্রতিষ্ঠান কখনো ফোনে পিন চায় না।',
+                            ),
+                            _infoRow(
+                              'ভুয়া নম্বর ভেরিফাই করতে বললে সতর্ক থাকুন',
+                              'সন্দেহজনক হলে ইন-অ্যাপ রিপোর্ট করুন।',
+                            ),
                           ],
                         ),
                       ),
@@ -142,9 +185,18 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 2),
-          Text(body, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5)),
+          Text(
+            body,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 12.5,
+            ),
+          ),
         ],
       ),
     );
@@ -178,7 +230,9 @@ class _Switch extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
-              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 6)],
+              boxShadow: const [
+                BoxShadow(color: Colors.black26, blurRadius: 6),
+              ],
             ),
           ),
         ),

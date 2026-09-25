@@ -53,13 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String _messageOf(String code) => switch (code) {
-        'invalid-email' => 'ইমেইল ঠিক নেই',
-        'user-disabled' => 'অ্যাকাউন্টটি নিষ্ক্রিয়',
-        'user-not-found' => 'এই ইমেইলে কোনো অ্যাকাউন্ট নেই',
-        'wrong-password' => 'পাসওয়ার্ড ভুল',
-        'invalid-credential' => 'ইমেইল বা পাসওয়ার্ড ভুল',
-        _ => 'লগইন ব্যর্থ হয়েছে',
-      };
+    'invalid-email' => 'ইমেইল ঠিক নেই',
+    'user-disabled' => 'অ্যাকাউন্টটি নিষ্ক্রিয়',
+    'user-not-found' => 'এই ইমেইলে কোনো অ্যাকাউন্ট নেই',
+    'wrong-password' => 'পাসওয়ার্ড ভুল',
+    'invalid-credential' => 'ইমেইল বা পাসওয়ার্ড ভুল',
+    _ => 'লগইন ব্যর্থ হয়েছে',
+  };
 
   void _toast(String msg) {
     ScaffoldMessenger.of(context)
@@ -97,18 +97,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.water_drop, color: Colors.white, size: 40),
+                  child: const Icon(
+                    Icons.water_drop,
+                    color: Colors.white,
+                    size: 40,
+                  ),
                 ),
                 const Text(
                   'স্বাগতম',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, letterSpacing: -0.4),
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.4,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 const Text(
                   'BloodLink BD-তে লগইন করুন',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 32),
                 TextField(
@@ -139,12 +150,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('অ্যাকাউন্ট নেই?', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                    const Text(
+                      'অ্যাকাউন্ট নেই?',
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 13,
+                      ),
+                    ),
                     TextButton(
                       onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const RegisterScreen(),
+                        ),
                       ),
-                      child: const Text('রেজিস্টার করুন', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700)),
+                      child: const Text(
+                        'রেজিস্টার করুন',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
                   ],
                 ),

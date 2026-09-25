@@ -66,11 +66,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   String _messageOf(String code) => switch (code) {
-        'email-already-in-use' => 'এই ইমেইলে আগেই অ্যাকাউন্ট আছে',
-        'invalid-email' => 'ইমেইল ঠিক নেই',
-        'weak-password' => 'পাসওয়ার্ড খুব সহজ',
-        _ => 'রেজিস্টার ব্যর্থ হয়েছে',
-      };
+    'email-already-in-use' => 'এই ইমেইলে আগেই অ্যাকাউন্ট আছে',
+    'invalid-email' => 'ইমেইল ঠিক নেই',
+    'weak-password' => 'পাসওয়ার্ড খুব সহজ',
+    _ => 'রেজিস্টার ব্যর্থ হয়েছে',
+  };
 
   void _toast(String msg) {
     ScaffoldMessenger.of(context)
@@ -93,10 +93,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('নতুন অ্যাকাউন্ট', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'নতুন অ্যাকাউন্ট',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -139,7 +145,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text('ব্লাড গ্রুপ', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                const Text(
+                  'ব্লাড গ্রুপ',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                ),
                 const SizedBox(height: 12),
                 Wrap(
                   spacing: 10,
@@ -150,18 +159,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         onTap: () => setState(() => _bloodGroup = g),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 180),
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
-                            color: _bloodGroup == g ? AppColors.primary : AppColors.surface,
+                            color: _bloodGroup == g
+                                ? AppColors.primary
+                                : AppColors.surface,
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
-                              color: _bloodGroup == g ? AppColors.primary : AppColors.border,
+                              color: _bloodGroup == g
+                                  ? AppColors.primary
+                                  : AppColors.border,
                             ),
                           ),
                           child: Text(
                             g,
                             style: TextStyle(
-                              color: _bloodGroup == g ? Colors.white : AppColors.textSecondary,
+                              color: _bloodGroup == g
+                                  ? Colors.white
+                                  : AppColors.textSecondary,
                               fontWeight: FontWeight.w800,
                               fontSize: 14,
                             ),

@@ -17,7 +17,8 @@ import '../utils/match_score.dart';
 import '../widgets/background_decor.dart';
 import '../widgets/blood_group_chip.dart';
 import '../widgets/donor_card.dart';
-import 'blood_list_screen.dart';
+import '../widgets/roster_swim.dart';
+import 'blood_list_detail_screen.dart';
 import 'chat_screen.dart';
 import 'donor_profile_screen.dart';
 
@@ -512,9 +513,8 @@ class _RequestDetailScreenState extends State<RequestDetailScreen> {
                   entry: e,
                   onCall: () => _roCall(e),
                   onWa: _waOk ? () => _roWa(e) : null,
-                  onViewAll: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const BloodListScreen()),
-                  ),
+                  onViewAll: () =>
+                      Navigator.of(context).push(bloodListEntryDetailRoute(e)),
                 ),
               ),
           ],
@@ -1307,20 +1307,22 @@ class _SuggestedRosterTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: AppColors.info.withValues(alpha: 0.14),
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
-              style: const TextStyle(
-                color: AppColors.info,
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
+          SwimmingAvatar(
+            child: Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: AppColors.info.withValues(alpha: 0.14),
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                e.name.trim().isEmpty ? '?' : e.name[0].toUpperCase(),
+                style: const TextStyle(
+                  color: AppColors.info,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ),

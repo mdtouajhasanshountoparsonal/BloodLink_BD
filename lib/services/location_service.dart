@@ -28,7 +28,9 @@ class LocationService {
       }
 
       _cached = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
       return _cached;
     } catch (_) {

@@ -93,7 +93,11 @@ class _UpdateBanner extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.system_update_alt_rounded, color: Colors.white, size: 20),
+              const Icon(
+                Icons.system_update_alt_rounded,
+                color: Colors.white,
+                size: 20,
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -123,28 +127,43 @@ class _UpdateBanner extends StatelessWidget {
               GestureDetector(
                 onTap: () async {
                   final ok = await launchUrl(
-                    Uri.parse(meta.downloadUrl.isNotEmpty
-                        ? meta.downloadUrl
-                        : AppMetaService.defaultDownloadUrl),
+                    Uri.parse(
+                      meta.downloadUrl.isNotEmpty
+                          ? meta.downloadUrl
+                          : AppMetaService.defaultDownloadUrl,
+                    ),
                     mode: LaunchMode.externalApplication,
                   );
                   if (!ok && context.mounted) {
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
-                      ..showSnackBar(const SnackBar(content: Text('ডাউনলোড পেজ খোলা যায়নি')));
+                      ..showSnackBar(
+                        const SnackBar(
+                          content: Text('ডাউনলোড পেজ খোলা যায়নি'),
+                        ),
+                      );
                   }
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.18),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.download_rounded, size: 14, color: Colors.white),
+                      Icon(
+                        Icons.download_rounded,
+                        size: 14,
+                        color: Colors.white,
+                      ),
                       SizedBox(width: 5),
                       Text(
                         'ডাউনলোড',
@@ -161,7 +180,11 @@ class _UpdateBanner extends StatelessWidget {
               IconButton(
                 onPressed: onClose,
                 tooltip: 'বন্ধ করো',
-                icon: const Icon(Icons.close_rounded, size: 17, color: Colors.white),
+                icon: const Icon(
+                  Icons.close_rounded,
+                  size: 17,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -198,18 +221,28 @@ class _BlockedScreen extends StatelessWidget {
                         color: AppColors.critical.withValues(alpha: 0.15),
                         border: Border.all(color: AppColors.critical, width: 2),
                       ),
-                      child: const Icon(Icons.lock_rounded, color: AppColors.critical, size: 36),
+                      child: const Icon(
+                        Icons.lock_rounded,
+                        color: AppColors.critical,
+                        size: 36,
+                      ),
                     ),
                     const SizedBox(height: 18),
                     const Text(
                       'অ্যাপটি বন্ধ আছে',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       message,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: AppColors.textSecondary, height: 1.6),
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        height: 1.6,
+                      ),
                     ),
                     const SizedBox(height: 18),
                     Text(

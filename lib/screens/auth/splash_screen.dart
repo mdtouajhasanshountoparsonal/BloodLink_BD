@@ -33,7 +33,11 @@ class SplashScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Icon(Icons.water_drop, color: Colors.white, size: 48),
+                child: const Icon(
+                  Icons.water_drop,
+                  color: Colors.white,
+                  size: 48,
+                ),
               ),
               const SizedBox(height: 24),
               const Text(

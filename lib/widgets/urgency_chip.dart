@@ -27,13 +27,19 @@ class UrgencyChip extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               shape: BoxShape.circle,
-              boxShadow: [BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 6)],
+              boxShadow: [
+                BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 6),
+              ],
             ),
           ),
           const SizedBox(width: 7),
           Text(
             urgency.label,
-            style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w700),
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ],
       ),

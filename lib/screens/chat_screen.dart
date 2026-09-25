@@ -47,8 +47,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _wa(String phone) async {
-    final ok = await ContactService.instance
-        .openWhatsapp(phone, text: '${widget.title} — BloodLink');
+    final ok = await ContactService.instance.openWhatsapp(
+      phone,
+      text: '${widget.title} — BloodLink',
+    );
     if (!ok && mounted) _toast('WhatsApp খোলা যায়নি');
   }
 
@@ -72,7 +74,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -86,12 +91,19 @@ class _ChatScreenState extends State<ChatScreen> {
                           Text(
                             widget.title,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    const Icon(Icons.lock_outline, size: 17, color: AppColors.textSecondary),
+                    const Icon(
+                      Icons.lock_outline,
+                      size: 17,
+                      color: AppColors.textSecondary,
+                    ),
                   ],
                 ),
               ),
@@ -102,7 +114,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   builder: (context, snap) {
                     if (snap.connectionState == ConnectionState.waiting) {
                       return const Center(
-                        child: CircularProgressIndicator(color: AppColors.primary),
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
                       );
                     }
                     final messages = snap.data ?? const <ChatMessage>[];
@@ -111,15 +125,20 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Text(
                           'এখনো কোনো মেসেজ নেই।\n\nফ্রি প্ল্যানে নতুন মেসেজ লেখা বন্ধ — যোগাযোগের জন্য নিচের কল/WhatsApp ব্যাবহার করুন।',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: AppColors.textSecondary, height: 1.6),
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            height: 1.6,
+                          ),
                         ),
                       );
                     }
                     return ListView.builder(
                       padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                       itemCount: messages.length,
-                      itemBuilder: (context, i) =>
-                          _Bubble(msg: messages[i], mine: messages[i].from == _user?.uid),
+                      itemBuilder: (context, i) => _Bubble(
+                        msg: messages[i],
+                        mine: messages[i].from == _user?.uid,
+                      ),
                     );
                   },
                 ),
@@ -150,12 +169,20 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           const Row(
             children: [
-              Icon(Icons.lock_rounded, size: 16, color: AppColors.textSecondary),
+              Icon(
+                Icons.lock_rounded,
+                size: 16,
+                color: AppColors.textSecondary,
+              ),
               SizedBox(width: 8),
               Expanded(
                 child: Text(
                   'মেসেজ লেখা লক করা আছে (ফ্রি প্ল্যানে কোটা বাঁচাতে)। যোগাযোগের জন্য:',
-                  style: TextStyle(fontSize: 12.5, color: AppColors.textSecondary, height: 1.4),
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
                 ),
               ),
             ],
@@ -214,7 +241,11 @@ class _ChatScreenState extends State<ChatScreen> {
             const SizedBox(width: 6),
             Text(
               label,
-              style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.w800),
+              style: TextStyle(
+                color: color,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ],
         ),

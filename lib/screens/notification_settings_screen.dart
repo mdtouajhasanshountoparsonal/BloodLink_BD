@@ -13,7 +13,8 @@ class NotificationSettingsScreen extends StatefulWidget {
       _NotificationSettingsScreenState();
 }
 
-class _NotificationSettingsScreenState extends State<NotificationSettingsScreen> {
+class _NotificationSettingsScreenState
+    extends State<NotificationSettingsScreen> {
   bool _newRequest = true;
   bool _myRequestActivity = true;
   bool _donationReminder = false;
@@ -57,10 +58,16 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('নোটিফিকেশন', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'নোটিফিকেশন',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
               ),
@@ -84,7 +91,11 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                                 _set('notif_new_request', v);
                               },
                             ),
-                            const Divider(height: 1, indent: 48, color: AppColors.border),
+                            const Divider(
+                              height: 1,
+                              indent: 48,
+                              color: AppColors.border,
+                            ),
                             _toggleRow(
                               icon: Icons.swap_calls_outlined,
                               title: 'আমার রিকোয়েস্টের কার্যকলাপ',
@@ -95,7 +106,11 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                                 _set('notif_my_request', v);
                               },
                             ),
-                            const Divider(height: 1, indent: 48, color: AppColors.border),
+                            const Divider(
+                              height: 1,
+                              indent: 48,
+                              color: AppColors.border,
+                            ),
                             _toggleRow(
                               icon: Icons.event_available_outlined,
                               title: 'ডোনেশন রিমাইন্ডার',
@@ -114,12 +129,19 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                         padding: const EdgeInsets.all(14),
                         child: const Row(
                           children: [
-                            Icon(Icons.info_outline, size: 18, color: AppColors.info),
+                            Icon(
+                              Icons.info_outline,
+                              size: 18,
+                              color: AppColors.info,
+                            ),
                             SizedBox(width: 10),
                             Expanded(
                               child: Text(
                                 'এই মূহূর্তে অ্যাপটি ফ্রি প্ল্যানে আছে, তাই পুশ নোটিফিকেশন বন্ধ — অ্যালার্ট অ্যাপ-এর ভেতরে (Snackbar) দেখানো হয়।',
-                                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
                           ],
@@ -161,9 +183,21 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(body, style: const TextStyle(color: AppColors.textSecondary, fontSize: 11.5)),
+                Text(
+                  body,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11.5,
+                  ),
+                ),
               ],
             ),
           ),
@@ -187,7 +221,9 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                   decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
-                    boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 5)],
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black26, blurRadius: 5),
+                    ],
                   ),
                 ),
               ),

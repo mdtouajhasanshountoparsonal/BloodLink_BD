@@ -45,7 +45,10 @@ class AuthService {
       password: password,
     );
     final uid = cred.user!.uid;
-    await _db.collection('users').doc(uid).set(
+    await _db
+        .collection('users')
+        .doc(uid)
+        .set(
           AppUser(
             uid: uid,
             email: email,

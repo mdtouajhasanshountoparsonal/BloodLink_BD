@@ -9,6 +9,16 @@ class ContactService {
   /// কল করার URI
   Uri callUri(String phone) => Uri(scheme: 'tel', path: phone);
 
+  /// ইমেইল খোলার URI (mailto)
+  Uri mailUri(String email, {String? subject, String? body}) => Uri(
+    scheme: 'mailto',
+    path: email,
+    queryParameters: {
+      if (subject != null && subject.isNotEmpty) 'subject': subject,
+      if (body != null && body.isNotEmpty) 'body': body,
+    },
+  );
+
   bool isValidPhone(String phone) => phone.trim().isNotEmpty;
 
   /// WhatsApp-এর জন্য আন্তর্জাতিক ফরম্যাট (BD: 0XX... → 880XX...)
@@ -24,7 +34,9 @@ class ContactService {
   /// খুললে নিজেই জানাবে)
   Future<bool> whatsappInstalled() async {
     try {
-      return await canLaunchUrl(Uri(scheme: 'whatsapp', host: '', path: 'send'));
+      return await canLaunchUrl(
+        Uri(scheme: 'whatsapp', host: '', path: 'send'),
+      );
     } catch (_) {
       return false;
     }

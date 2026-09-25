@@ -67,7 +67,9 @@ class _MessagingWrapperState extends State<MessagingWrapper> {
         SnackBar(
           backgroundColor: const Color(0xFF1E2935),
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -59,4 +59,28 @@ class BloodListEntry {
     'verified': verified,
     'createdAt': createdAt ?? FieldValue.serverTimestamp(),
   };
+
+  BloodListEntry copyWith({
+    String? id,
+    String? name,
+    String? bloodGroup,
+    List<String>? phones,
+    String? email,
+    String? area,
+    String? note,
+    String? addedBy,
+    bool? verified,
+    DateTime? createdAt,
+  }) => BloodListEntry(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    bloodGroup: bloodGroup ?? this.bloodGroup,
+    phones: phones ?? this.phones,
+    email: email ?? this.email,
+    area: area ?? this.area,
+    note: note ?? this.note,
+    addedBy: addedBy ?? this.addedBy,
+    verified: verified ?? this.verified,
+    createdAt: createdAt ?? this.createdAt,
+  );
 }

@@ -61,8 +61,12 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
   double? _km(BloodRequest r) {
     final my = _pos;
     if (my == null || r.latitude == null || r.longitude == null) return null;
-    return LocationService.instance
-        .distanceKm(my.latitude, my.longitude, r.latitude!, r.longitude!);
+    return LocationService.instance.distanceKm(
+      my.latitude,
+      my.longitude,
+      r.latitude!,
+      r.longitude!,
+    );
   }
 
   List<BloodRequest> get _sorted {
@@ -70,7 +74,9 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
     list.sort((a, b) {
       final da = _km(a);
       final db = _km(b);
-      if (da == null && db == null) return _urgencyRank(a).compareTo(_urgencyRank(b));
+      if (da == null && db == null) {
+        return _urgencyRank(a).compareTo(_urgencyRank(b));
+      }
       if (da == null) return 1;
       if (db == null) return -1;
       return da.compareTo(db);
@@ -79,10 +85,10 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
   }
 
   int _urgencyRank(BloodRequest r) => switch (r.urgency) {
-        Urgency.critical => 0,
-        Urgency.urgent => 1,
-        Urgency.normal => 2,
-      };
+    Urgency.critical => 0,
+    Urgency.urgent => 1,
+    Urgency.normal => 2,
+  };
 
   Future<void> _callRequester(BloodRequest r) async {
     if (r.requesterPhone.isEmpty) return;
@@ -112,10 +118,16 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('কাছের রিকোয়েস্ট', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'কাছের রিকোয়েস্ট',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
               ),
@@ -126,7 +138,10 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                   _pos == null
                       ? 'লোকেশন অন করুন — সব রিকোয়েস্ট জরুরিভিত্তিতে সাজানো হবে'
                       : 'আপনার লোকেশন থেকে আস্তে-আস্তে দূরত্ব অনুযায়ী সাজানো',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                  ),
                 ),
               ),
               const SizedBox(height: 14),
@@ -146,7 +161,10 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.critical.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
@@ -154,7 +172,10 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                     ),
                     child: const Text(
                       'রিকোয়েস্ট আনতে সমস্যা হচ্ছে (rules/limit)। ইন্টারনেট ও লগইন চেক করুন।',
-                      style: TextStyle(color: AppColors.critical, fontSize: 12.5),
+                      style: TextStyle(
+                        color: AppColors.critical,
+                        fontSize: 12.5,
+                      ),
                     ),
                   ),
                 ),
@@ -162,22 +183,25 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                 child: _loading
                     ? const Center(child: CircularProgressIndicator())
                     : list.isEmpty
-                        ? const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30),
-                              child: Text(
-                                'এখনো কোনো সক্রিয় রিকোয়েস্ট নেই\n\nরিকোয়েস্ট করলে ৬ ঘণ্টা পর্যন্ত এখানে দেখা যাবে। রিকোয়েস্ট করার পরে অন্য ডিভাইস থেকে দেখুন।',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(color: AppColors.textSecondary, height: 1.6),
-                              ),
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Text(
+                            'এখনো কোনো সক্রিয় রিকোয়েস্ট নেই\n\nরিকোয়েস্ট করলে ৬ ঘণ্টা পর্যন্ত এখানে দেখা যাবে। রিকোয়েস্ট করার পরে অন্য ডিভাইস থেকে দেখুন।',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              height: 1.6,
                             ),
-                          )
-                        : ListView.separated(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
-                            itemCount: list.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: 12),
-                            itemBuilder: (context, i) => _nearbyCard(list[i]),
                           ),
+                        ),
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+                        itemCount: list.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 12),
+                        itemBuilder: (context, i) => _nearbyCard(list[i]),
+                      ),
               ),
             ],
           ),
@@ -217,7 +241,10 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                 const SizedBox(width: 10),
                 if (km != null)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 9,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.info.withValues(alpha: 0.14),
                       borderRadius: BorderRadius.circular(999),
@@ -225,25 +252,40 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.near_me, size: 12, color: AppColors.info),
+                        const Icon(
+                          Icons.near_me,
+                          size: 12,
+                          color: AppColors.info,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${km.toStringAsFixed(1)} km',
-                          style: const TextStyle(color: AppColors.info, fontSize: 11.5, fontWeight: FontWeight.w800),
+                          style: const TextStyle(
+                            color: AppColors.info,
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: r.urgency.color.withValues(alpha: 0.16),
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
                     r.urgency.label,
-                    style: TextStyle(color: r.urgency.color, fontSize: 11.5, fontWeight: FontWeight.w800),
+                    style: TextStyle(
+                      color: r.urgency.color,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ],
@@ -258,13 +300,19 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                       Text(
                         r.patientName,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                       const SizedBox(height: 3),
                       Text(
                         '${r.hospital} • ${r.area}',
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12.5,
+                        ),
                       ),
                     ],
                   ),
@@ -275,12 +323,18 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                   children: [
                     Text(
                       '${r.bags} ব্যাগ',
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 3),
                     Text(
                       'বাকি $remaining',
-                      style: const TextStyle(color: AppColors.critical, fontSize: 11.5),
+                      style: const TextStyle(
+                        color: AppColors.critical,
+                        fontSize: 11.5,
+                      ),
                     ),
                   ],
                 ),
@@ -289,20 +343,32 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
             const SizedBox(height: 14),
             Row(
               children: [
-                const Icon(Icons.person_outline, size: 15, color: AppColors.textSecondary),
+                const Icon(
+                  Icons.person_outline,
+                  size: 15,
+                  color: AppColors.textSecondary,
+                ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    r.requesterName.isNotEmpty ? 'রিকোয়েস্টকর্তা: ${r.requesterName}' : 'রিকোয়েস্টকর্তা অজানা',
+                    r.requesterName.isNotEmpty
+                        ? 'রিকোয়েস্টকর্তা: ${r.requesterName}'
+                        : 'রিকোয়েস্টকর্তা অজানা',
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
                 if (r.requesterPhone.isNotEmpty)
                   GestureDetector(
                     onTap: () => _callRequester(r),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 13,
+                        vertical: 9,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.normal.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(13),
@@ -311,7 +377,11 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.call_rounded, size: 15, color: AppColors.normal),
+                          Icon(
+                            Icons.call_rounded,
+                            size: 15,
+                            color: AppColors.normal,
+                          ),
                           SizedBox(width: 6),
                           Text(
                             'যোগাযোগ',
@@ -326,7 +396,11 @@ class _NearbyRequestsScreenState extends State<NearbyRequestsScreen> {
                     ),
                   )
                 else
-                  const Icon(Icons.phone_disabled, size: 15, color: AppColors.textSecondary),
+                  const Icon(
+                    Icons.phone_disabled,
+                    size: 15,
+                    color: AppColors.textSecondary,
+                  ),
               ],
             ),
           ],

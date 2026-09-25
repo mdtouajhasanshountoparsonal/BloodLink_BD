@@ -77,6 +77,34 @@ class BloodListService {
     }
   }
 
+  Future<({bool ok, String message})> updateEntry({
+    required String id,
+    required String name,
+    required String bloodGroup,
+    required List<String> phones,
+    String email = '',
+    String area = '',
+    String note = '',
+  }) async {
+    try {
+      await _coll.doc(id).update({
+        'name': name.trim(),
+        'bloodGroup': bloodGroup,
+        'phones': phones
+            .map((p) => p.trim())
+            .where((p) => p.isNotEmpty)
+            .toList(),
+        'email': email.trim(),
+        'area': area.trim(),
+        'note': note.trim(),
+      });
+      UsageCounter.instance.trackWrite('bloodList');
+      return (ok: true, message: 'আপডেট হয়েছে');
+    } catch (e) {
+      return (ok: false, message: 'ব্যর্থ: $e');
+    }
+  }
+
   Future<({bool ok, String message})> setVerified(
     String id,
     bool verified,

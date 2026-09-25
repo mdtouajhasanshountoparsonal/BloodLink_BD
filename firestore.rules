@@ -148,7 +148,8 @@ service cloud.firestore {
     }
 
     // ---------- Blood donation list (roster) ----------
-    // সবাই দেখে ও যোগাযোগ করে; ম্যানেজার যোগ/মুছে; অ্যাডমিন নম্বর ভেরিফাই করে
+    // সবাই দেখে ও যোগাযোগ করে; ম্যানেজার যোগ/এডিট করে; অ্যাডমিন ভেরিফাই করে;
+    // ডিলিট শুধু অ্যাডমিন (ম্যানেজার ডিলিট করতে পারবে না)
     match /bloodList/{entryId} {
       allow read: if signedIn();
       allow create: if signedIn() && manager()
@@ -164,7 +165,7 @@ service cloud.firestore {
           && request.resource.data.name is string
           && request.resource.data.phones is list)
       );
-      allow delete: if signedIn() && manager();
+      allow delete: if signedIn() && admin();
     }
   }
 }

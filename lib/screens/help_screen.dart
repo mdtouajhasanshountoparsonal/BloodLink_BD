@@ -19,7 +19,10 @@ class _HelpScreenState extends State<HelpScreen> {
   int _open = 0;
 
   Future<void> _openUrl(String url) async {
-    final ok = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    final ok = await launchUrl(
+      Uri.parse(url),
+      mode: LaunchMode.externalApplication,
+    );
     if (!ok && mounted) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
@@ -69,10 +72,16 @@ class _HelpScreenState extends State<HelpScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('সাহায্য ও সাপোর্ট', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'সাহায্য ও সাপোর্ট',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
               ),
@@ -87,44 +96,72 @@ class _HelpScreenState extends State<HelpScreen> {
                         padding: const EdgeInsets.all(14),
                         child: const Row(
                           children: [
-                            Icon(Icons.headset_mic_rounded, color: AppColors.primary, size: 22),
+                            Icon(
+                              Icons.headset_mic_rounded,
+                              color: AppColors.primary,
+                              size: 22,
+                            ),
                             SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 'কোনো সমস্যা হলে রিলিজ নোট চেক করুন। ব্যক্তিগত সহায়তার জন্য অ্যাপের "রিপোর্ট করুন" সেকশন অথবা ইমেইল support@bloodlinkbd.com',
-                                style: TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 12.5,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 24),
-                      const Text('অফিসিয়াল ওয়েবসাইট ও ডেভেলপার',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      const Text(
+                        'অফিসিয়াল ওয়েবসাইট ও ডেভেলপার',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                       const SizedBox(height: 12),
                       GlassCard(
                         radius: 18,
-                        onTap: () => _openUrl(AppMetaService.defaultDownloadUrl),
+                        onTap: () =>
+                            _openUrl(AppMetaService.defaultDownloadUrl),
                         padding: const EdgeInsets.all(16),
                         child: const Row(
                           children: [
-                            Icon(Icons.public_rounded, color: AppColors.primary, size: 22),
+                            Icon(
+                              Icons.public_rounded,
+                              color: AppColors.primary,
+                              size: 22,
+                            ),
                             SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('নতুন ভার্সন / ডাউনলোড',
-                                      style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800)),
+                                  Text(
+                                    'নতুন ভার্সন / ডাউনলোড',
+                                    style: TextStyle(
+                                      fontSize: 13.5,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
                                   SizedBox(height: 2),
                                   Text(
                                     'অফিসিয়াল BloodLink BD ওয়েবসাইট থেকে APK ডাউনলোড করুন',
-                                    style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColors.textSecondary,
+                            ),
                           ],
                         ),
                       ),
@@ -135,23 +172,38 @@ class _HelpScreenState extends State<HelpScreen> {
                         padding: const EdgeInsets.all(16),
                         child: const Row(
                           children: [
-                            Icon(Icons.rocket_launch_rounded, color: AppColors.violet, size: 22),
+                            Icon(
+                              Icons.rocket_launch_rounded,
+                              color: AppColors.violet,
+                              size: 22,
+                            ),
                             SizedBox(width: 12),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('ডেভেলপার',
-                                      style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800)),
+                                  Text(
+                                    'ডেভেলপার',
+                                    style: TextStyle(
+                                      fontSize: 13.5,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
                                   SizedBox(height: 2),
                                   Text(
                                     'MD. TOUAJ HASAN SHANTO — পোর্টফোলিও দেখুন',
-                                    style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
-                            Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColors.textSecondary,
+                            ),
                           ],
                         ),
                       ),
@@ -166,8 +218,13 @@ class _HelpScreenState extends State<HelpScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('আমার অ্যাপ আইডি (UID)',
-                                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800)),
+                                const Text(
+                                  'আমার অ্যাপ আইডি (UID)',
+                                  style: TextStyle(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
                                 const SizedBox(height: 6),
                                 Row(
                                   children: [
@@ -185,21 +242,43 @@ class _HelpScreenState extends State<HelpScreen> {
                                     if (uid.isNotEmpty)
                                       GestureDetector(
                                         onTap: () async {
-                                          await Clipboard.setData(ClipboardData(text: uid));
+                                          await Clipboard.setData(
+                                            ClipboardData(text: uid),
+                                          );
                                           if (!context.mounted) return;
                                           ScaffoldMessenger.of(context)
                                             ..hideCurrentSnackBar()
-                                            ..showSnackBar(const SnackBar(content: Text('UID কপি হয়েছে')));
+                                            ..showSnackBar(
+                                              const SnackBar(
+                                                content: Text('UID কপি হয়েছে'),
+                                              ),
+                                            );
                                         },
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.info.withValues(alpha: 0.12),
-                                            borderRadius: BorderRadius.circular(10),
-                                            border: Border.all(color: AppColors.info.withValues(alpha: 0.4)),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 8,
                                           ),
-                                          child: const Text('কপি',
-                                              style: TextStyle(color: AppColors.info, fontWeight: FontWeight.w700)),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.info.withValues(
+                                              alpha: 0.12,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            border: Border.all(
+                                              color: AppColors.info.withValues(
+                                                alpha: 0.4,
+                                              ),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'কপি',
+                                            style: TextStyle(
+                                              color: AppColors.info,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                   ],
@@ -207,7 +286,11 @@ class _HelpScreenState extends State<HelpScreen> {
                                 const SizedBox(height: 8),
                                 const Text(
                                   'এই UID-টি Firebase Console → appMeta → main → admins অ্যারেতে বসালে আপনি অ্যাডমিন হবেন।',
-                                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.5),
+                                  style: TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 12,
+                                    height: 1.5,
+                                  ),
                                 ),
                               ],
                             ),
@@ -215,8 +298,13 @@ class _HelpScreenState extends State<HelpScreen> {
                         },
                       ),
                       const SizedBox(height: 24),
-                      const Text('সাধারণ প্রশ্ন (FAQ)',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                      const Text(
+                        'সাধারণ প্রশ্ন (FAQ)',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                       const SizedBox(height: 12),
                       for (var i = 0; i < _faqs.length; i++)
                         Padding(
@@ -226,7 +314,8 @@ class _HelpScreenState extends State<HelpScreen> {
                             open: _open == i,
                             question: _faqs[i].$1,
                             answer: _faqs[i].$2,
-                            onTap: () => setState(() => _open = _open == i ? -1 : i),
+                            onTap: () =>
+                                setState(() => _open = _open == i ? -1 : i),
                           ),
                         ),
                     ],
@@ -270,29 +359,51 @@ class _FaqTile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               child: Row(
                 children: [
-                  Text('${index + 1}.', style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800)),
+                  Text(
+                    '${index + 1}.',
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(question, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                    child: Text(
+                      question,
+                      style: const TextStyle(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                   AnimatedRotation(
                     duration: const Duration(milliseconds: 200),
                     turns: open ? 0.5 : 0,
-                    child: const Icon(Icons.expand_more, color: AppColors.textSecondary, size: 20),
+                    child: const Icon(
+                      Icons.expand_more,
+                      color: AppColors.textSecondary,
+                      size: 20,
+                    ),
                   ),
                 ],
               ),
             ),
             AnimatedCrossFade(
               duration: const Duration(milliseconds: 220),
-              crossFadeState: open ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+              crossFadeState: open
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
               firstChild: const SizedBox(width: double.infinity, height: 0),
               secondChild: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
                 child: Text(
                   answer,
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5, height: 1.55),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12.5,
+                    height: 1.55,
+                  ),
                 ),
               ),
             ),

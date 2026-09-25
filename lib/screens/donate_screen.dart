@@ -51,11 +51,17 @@ class _DonateScreenState extends State<DonateScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('ডোনেট করুন', style: Theme.of(context).textTheme.headlineMedium),
+                Text(
+                  'ডোনেট করুন',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
                 const SizedBox(height: 4),
                 const Text(
                   'আপনার রক্ত অন্যকে জীবন দেয়',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 if (user != null) _DonorCard(user: user),
@@ -67,11 +73,15 @@ class _DonateScreenState extends State<DonateScreen> {
                 const SizedBox(height: 22),
                 const SectionHeader(title: 'রক্তদানের উপকারিতা'),
                 const SizedBox(height: 12),
-                _BenefitsCard(onTapInfo: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const DonationInfoScreen()),
-                  );
-                }),
+                _BenefitsCard(
+                  onTapInfo: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const DonationInfoScreen(),
+                      ),
+                    );
+                  },
+                ),
                 const SizedBox(height: 22),
                 const SectionHeader(title: 'ডোনেশন নিয়ম'),
                 const SizedBox(height: 12),
@@ -174,9 +184,15 @@ class _DonorCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.14),
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.25)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.25),
+                  ),
                 ),
-                child: const Icon(Icons.water_drop, color: Colors.white, size: 24),
+                child: const Icon(
+                  Icons.water_drop,
+                  color: Colors.white,
+                  size: 24,
+                ),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -194,15 +210,27 @@ class _DonorCard extends StatelessWidget {
                     ),
                     Text(
                       'Donor Card',
-                      style: TextStyle(color: Colors.white70, fontSize: 11.5, letterSpacing: 0.4),
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 11.5,
+                        letterSpacing: 0.4,
+                      ),
                     ),
                   ],
                 ),
               ),
               if (user.verified)
-                const Icon(Icons.verified_rounded, color: Colors.white, size: 22)
+                const Icon(
+                  Icons.verified_rounded,
+                  color: Colors.white,
+                  size: 22,
+                )
               else
-                Icon(Icons.verified_rounded, color: Colors.white.withValues(alpha: 0.25), size: 22),
+                Icon(
+                  Icons.verified_rounded,
+                  color: Colors.white.withValues(alpha: 0.25),
+                  size: 22,
+                ),
             ],
           ),
           const SizedBox(height: 26),
@@ -215,17 +243,28 @@ class _DonorCard extends StatelessWidget {
                     Text(
                       user.name,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'গ্রুপ ${user.bloodGroup} • উপলব্ধ: ${user.available ? 'হ্যাঁ' : 'না'}',
-                      style: const TextStyle(color: Colors.white70, fontSize: 12.5),
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12.5,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       '${user.donations} বার ডোনেশন',
-                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -269,7 +308,12 @@ class _AvailabilityCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: activeColor,
               shape: BoxShape.circle,
-              boxShadow: [BoxShadow(color: activeColor.withValues(alpha: 0.6), blurRadius: 8)],
+              boxShadow: [
+                BoxShadow(
+                  color: activeColor.withValues(alpha: 0.6),
+                  blurRadius: 8,
+                ),
+              ],
             ),
           ),
           const SizedBox(width: 12),
@@ -278,13 +322,21 @@ class _AvailabilityCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  available ? 'আপনি ডোনেট করতে প্রস্তুত' : 'ডোনেট করতে পারবেন না',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  available
+                      ? 'আপনি ডোনেট করতে প্রস্তুত'
+                      : 'ডোনেট করতে পারবেন না',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 3),
                 const Text(
                   'এই স্ট্যাটাস সেভ হলে কাছের ডোনাররা দেখতে পাবে',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 11.5),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11.5,
+                  ),
                 ),
               ],
             ),
@@ -303,14 +355,21 @@ class _AvailabilityCard extends StatelessWidget {
               child: AnimatedAlign(
                 duration: const Duration(milliseconds: 220),
                 curve: Curves.easeOut,
-                alignment: available ? Alignment.centerRight : Alignment.centerLeft,
+                alignment: available
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
                 child: Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
                     color: activeColor,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: activeColor.withValues(alpha: 0.5), blurRadius: 8)],
+                    boxShadow: [
+                      BoxShadow(
+                        color: activeColor.withValues(alpha: 0.5),
+                        blurRadius: 8,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -333,9 +392,18 @@ class _BenefitsCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       child: Column(
         children: [
-          const _RuleRow(icon: Icons.favorite_outline, text: 'রক্তদানে ৩ জনের জীবন বাঁচে'),
-          const _RuleRow(icon: Icons.insights_rounded, text: 'নতুন রক্তকণিকা তৈরি হয় — শরীর চাঙ্গা'),
-          const _RuleRow(icon: Icons.heart_broken_outlined, text: 'হৃদরোগের ঝুঁকি কমায় (বিজ্ঞানসম্মত)'),
+          const _RuleRow(
+            icon: Icons.favorite_outline,
+            text: 'রক্তদানে ৩ জনের জীবন বাঁচে',
+          ),
+          const _RuleRow(
+            icon: Icons.insights_rounded,
+            text: 'নতুন রক্তকণিকা তৈরি হয় — শরীর চাঙ্গা',
+          ),
+          const _RuleRow(
+            icon: Icons.heart_broken_outlined,
+            text: 'হৃদরোগের ঝুঁকি কমায় (বিজ্ঞানসম্মত)',
+          ),
           const SizedBox(height: 6),
           GestureDetector(
             onTap: onTapInfo,
@@ -378,10 +446,22 @@ class _EligibilityCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: const Column(
         children: [
-          _RuleRow(icon: Icons.monitor_weight_outlined, text: 'ওজন ৪৫ কেজির বেশি'),
-          _RuleRow(icon: Icons.health_and_safety_outlined, text: 'শেষ ৩ মাসে ডোনেশন নেই'),
-          _RuleRow(icon: Icons.science_outlined, text: 'হিমোগ্লোবিন ১২.৫ g/dL এর বেশি'),
-          _RuleRow(icon: Icons.schedule, text: 'শেষ ৬ মাসে ট্যাটু/মেজর সার্জারি নেই'),
+          _RuleRow(
+            icon: Icons.monitor_weight_outlined,
+            text: 'ওজন ৪৫ কেজির বেশি',
+          ),
+          _RuleRow(
+            icon: Icons.health_and_safety_outlined,
+            text: 'শেষ ৩ মাসে ডোনেশন নেই',
+          ),
+          _RuleRow(
+            icon: Icons.science_outlined,
+            text: 'হিমোগ্লোবিন ১২.৫ g/dL এর বেশি',
+          ),
+          _RuleRow(
+            icon: Icons.schedule,
+            text: 'শেষ ৬ মাসে ট্যাটু/মেজর সার্জারি নেই',
+          ),
         ],
       ),
     );
@@ -403,9 +483,19 @@ class _RuleRow extends StatelessWidget {
           Icon(icon, size: 18, color: AppColors.normal),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(text, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13)),
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 13,
+              ),
+            ),
           ),
-          const Icon(Icons.check_circle_outline, size: 18, color: AppColors.normal),
+          const Icon(
+            Icons.check_circle_outline,
+            size: 18,
+            color: AppColors.normal,
+          ),
         ],
       ),
     );
@@ -439,18 +529,35 @@ class _HistoryItem extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.14),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.water_drop_outlined, color: AppColors.primary, size: 21),
+            child: const Icon(
+              Icons.water_drop_outlined,
+              color: AppColors.primary,
+              size: 21,
+            ),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(date, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                Text(
+                  date,
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 const SizedBox(height: 3),
                 Text(
-                  hospital.isEmpty ? patient : patient.isEmpty ? hospital : '$patient • $hospital',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                  hospital.isEmpty
+                      ? patient
+                      : patient.isEmpty
+                      ? hospital
+                      : '$patient • $hospital',
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12.5,
+                  ),
                 ),
               ],
             ),
@@ -466,12 +573,19 @@ class _HistoryItem extends StatelessWidget {
                 Container(
                   width: 6,
                   height: 6,
-                  decoration: const BoxDecoration(color: AppColors.normal, shape: BoxShape.circle),
+                  decoration: const BoxDecoration(
+                    color: AppColors.normal,
+                    shape: BoxShape.circle,
+                  ),
                 ),
                 const SizedBox(width: 6),
                 Text(
                   group,
-                  style: const TextStyle(color: AppColors.normal, fontSize: 12, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    color: AppColors.normal,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ],
             ),
@@ -507,7 +621,10 @@ class _QrPainter extends CustomPainter {
     void finder(double x, double y) {
       paint.color = const Color(0xFF111111);
       canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(x, y, cell * 7, cell * 7), Radius.circular(cell)),
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(x, y, cell * 7, cell * 7),
+          Radius.circular(cell),
+        ),
         paint,
       );
       paint.color = Colors.white;

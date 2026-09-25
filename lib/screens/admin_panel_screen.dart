@@ -30,14 +30,25 @@ class AdminPanelScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () => Navigator.of(context).pop(),
-                        child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 20,
+                        ),
                       ),
                       const SizedBox(width: 14),
                       const Expanded(
-                        child: Text('অ্যাডমিন প্যানেল',
-                            style: TextStyle(fontSize: 21, fontWeight: FontWeight.w800)),
+                        child: Text(
+                          'অ্যাডমিন প্যানেল',
+                          style: TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
-                      Icon(Icons.admin_panel_settings_rounded, color: AppColors.primary),
+                      Icon(
+                        Icons.admin_panel_settings_rounded,
+                        color: AppColors.primary,
+                      ),
                     ],
                   ),
                 ),
@@ -57,7 +68,10 @@ class AdminPanelScreen extends StatelessWidget {
                     dividerColor: Colors.transparent,
                     labelColor: Colors.white,
                     unselectedLabelColor: AppColors.textSecondary,
-                    labelStyle: TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+                    labelStyle: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13,
+                    ),
                     tabs: [
                       Tab(text: 'অ্যাপ'),
                       Tab(text: 'রিকোয়েস্ট'),
@@ -111,7 +125,8 @@ class _AppControlTabState extends State<_AppControlTab> {
     final u = await AuthService.instance.currentUser();
     final snap = await AdminService.instance.fetchMeta();
     _urlCtrl.text = snap?['downloadUrl'] as String? ?? '';
-    _versionCtrl.text = snap?['latestVersion'] as String? ?? AppMetaService.currentVersion;
+    _versionCtrl.text =
+        snap?['latestVersion'] as String? ?? AppMetaService.currentVersion;
     _noticeCtrl.text = snap?['notice'] as String? ?? '';
     _forceMsgCtrl.text = snap?['forceMessage'] as String? ?? '';
     final fc = snap?['forceClose'] as bool? ?? false;
@@ -138,8 +153,9 @@ class _AppControlTabState extends State<_AppControlTab> {
     final res = await AdminService.instance.saveAppMeta(
       forceClose: _forceClose,
       forceMessage: _forceMsgCtrl.text.trim(),
-      latestVersion:
-          _versionCtrl.text.trim().isEmpty ? null : _versionCtrl.text.trim(),
+      latestVersion: _versionCtrl.text.trim().isEmpty
+          ? null
+          : _versionCtrl.text.trim(),
       downloadUrl: _urlCtrl.text.trim().isEmpty ? null : _urlCtrl.text.trim(),
       notice: _noticeCtrl.text.trim(),
     );
@@ -171,8 +187,10 @@ class _AppControlTabState extends State<_AppControlTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('আমার অ্যাডমিন আইডি (UID)',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                const Text(
+                  'আমার অ্যাডমিন আইডি (UID)',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 6),
                 Row(
                   children: [
@@ -190,21 +208,36 @@ class _AppControlTabState extends State<_AppControlTab> {
                     GestureDetector(
                       onTap: _copyUid,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.info.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.info.withValues(alpha: 0.4)),
+                          border: Border.all(
+                            color: AppColors.info.withValues(alpha: 0.4),
+                          ),
                         ),
-                        child: const Text('কপি', style: TextStyle(color: AppColors.info, fontWeight: FontWeight.w700)),
+                        child: const Text(
+                          'কপি',
+                          style: TextStyle(
+                            color: AppColors.info,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'অ্যাডমিন: Firebase Console → appMeta/main → admins অ্যারেতে UID বসান।\nম্যানেজার (কো-অ্যাডমিন, শুধু রক্তদাতা তালিকা চালায়): managers অ্যারেতে UID বসান।',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.5),
+                  'অ্যাডমিন: Firebase Console → appMeta/main → admins অ্যারেতে UID বসান।\nম্যানেজার (কো-অ্যাডমিন, শুধু রক্তদাতা তালিকা চালায়): নিচের "ইউজার" ট্যাব থেকে এক ট্যাপে তৈরি/সরাতে পারবেন।',
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                    height: 1.5,
+                  ),
                 ),
               ],
             ),
@@ -214,12 +247,21 @@ class _AppControlTabState extends State<_AppControlTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _field('নতুন ভার্সন (latestVersion)', _versionCtrl,
-                    hint: 'যেমন 0.1.1 — অ্যাপে "নতুন ভার্সন" ব্যানার দেখাবে'),
-                _field('ডাউনলোড লিংক (downloadUrl)', _urlCtrl,
-                    hint: 'ওয়েবসাইট / APK লিংক'),
-                _field('নোটিস বার্তা (notice)', _noticeCtrl,
-                    hint: 'ব্যানারে দেখানো টেক্সট'),
+                _field(
+                  'নতুন ভার্সন (latestVersion)',
+                  _versionCtrl,
+                  hint: 'যেমন 0.1.1 — অ্যাপে "নতুন ভার্সন" ব্যানার দেখাবে',
+                ),
+                _field(
+                  'ডাউনলোড লিংক (downloadUrl)',
+                  _urlCtrl,
+                  hint: 'ওয়েবসাইট / APK লিংক',
+                ),
+                _field(
+                  'নোটিস বার্তা (notice)',
+                  _noticeCtrl,
+                  hint: 'ব্যানারে দেখানো টেক্সট',
+                ),
                 const SizedBox(height: 6),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
@@ -227,12 +269,17 @@ class _AppControlTabState extends State<_AppControlTab> {
                   onChanged: (v) => setState(() => _forceClose = v),
                   activeTrackColor: AppColors.critical,
                   activeThumbColor: Colors.white,
-                  title: const Text('অ্যাপ চিরতরে বন্ধ (Force Close)',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
-                  subtitle: const Text('ON করলে সবাই শুধু বন্ধ-স্ক্রিন দেখবে',
-                      style: TextStyle(color: AppColors.critical, fontSize: 12)),
+                  title: const Text(
+                    'অ্যাপ চিরতরে বন্ধ (Force Close)',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                  subtitle: const Text(
+                    'ON করলে সবাই শুধু বন্ধ-স্ক্রিন দেখবে',
+                    style: TextStyle(color: AppColors.critical, fontSize: 12),
+                  ),
                 ),
-                if (_forceClose) _field('বন্ধের বার্তা (forceMessage)', _forceMsgCtrl),
+                if (_forceClose)
+                  _field('বন্ধের বার্তা (forceMessage)', _forceMsgCtrl),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
@@ -241,11 +288,16 @@ class _AppControlTabState extends State<_AppControlTab> {
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     icon: _saving
                         ? const SizedBox(
-                            width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
                         : const Icon(Icons.save_rounded, size: 18),
                     label: Text(_saving ? 'সংরক্ষণ হচ্ছে…' : 'সংরক্ষণ করুন'),
                   ),
@@ -269,14 +321,20 @@ class _AppControlTabState extends State<_AppControlTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 6),
           TextField(
             controller: ctrl,
             style: const TextStyle(fontSize: 13.5),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+              hintStyle: const TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 12,
+              ),
               filled: true,
               fillColor: AppColors.surfaceHigh.withValues(alpha: 0.6),
               isDense: true,
@@ -306,8 +364,10 @@ class _RequestsTab extends StatelessWidget {
         final list = snap.data ?? const [];
         if (list.isEmpty) {
           return const Center(
-            child: Text('কোনো রিকোয়েস্ট নেই',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(
+              'কোনো রিকোয়েস্ট নেই',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
           );
         }
         return ListView.separated(
@@ -326,71 +386,155 @@ class _RequestsTab extends StatelessWidget {
                     children: [
                       BloodGroupChip(group: r.bloodGroup, compact: true),
                       const SizedBox(width: 8),
-                      Icon(r.urgency.color == AppColors.critical
-                          ? Icons.emergency_rounded
-                          : r.urgency.color == AppColors.urgent
-                              ? Icons.schedule_rounded
-                              : Icons.info_outline_rounded,
-                          size: 14, color: r.urgency.color),
+                      Icon(
+                        r.urgency.color == AppColors.critical
+                            ? Icons.emergency_rounded
+                            : r.urgency.color == AppColors.urgent
+                            ? Icons.schedule_rounded
+                            : Icons.info_outline_rounded,
+                        size: 14,
+                        color: r.urgency.color,
+                      ),
                       const SizedBox(width: 4),
-                      Text(r.urgency.label,
-                          style: TextStyle(color: r.urgency.color, fontSize: 11, fontWeight: FontWeight.w700)),
+                      Text(
+                        r.urgency.label,
+                        style: TextStyle(
+                          color: r.urgency.color,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const Spacer(),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
                         decoration: BoxDecoration(
                           color: r.status == 'active'
                               ? AppColors.normal.withValues(alpha: 0.15)
                               : AppColors.textSecondary.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(99),
                         ),
-                        child: Text(r.status,
-                            style: TextStyle(
-                                color: r.status == 'active' ? AppColors.normal : AppColors.textSecondary,
-                                fontSize: 11, fontWeight: FontWeight.w700)),
+                        child: Text(
+                          r.status,
+                          style: TextStyle(
+                            color: r.status == 'active'
+                                ? AppColors.normal
+                                : AppColors.textSecondary,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Text('রোগী: ${r.patientName} · ${r.bags} ব্যাগ',
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+                  Text(
+                    'রোগী: ${r.patientName} · ${r.bags} ব্যাগ',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                   const SizedBox(height: 3),
-                  Text('${r.hospital}, ${r.area}',
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5)),
-                  Text('রিকোয়েস্টার: ${r.requesterName} (${r.requesterPhone})',
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                  Text(
+                    '${r.hospital}, ${r.area}',
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12.5,
+                    ),
+                  ),
+                  Text(
+                    'রিকোয়েস্টার: ${r.requesterName} (${r.requesterPhone})',
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
                   if (r.isActive)
-                    Text('মেয়াদ: ${r.remainingLabel()}',
-                        style: const TextStyle(color: AppColors.urgent, fontSize: 12)),
+                    Text(
+                      'মেয়াদ: ${r.remainingLabel()}',
+                      style: const TextStyle(
+                        color: AppColors.urgent,
+                        fontSize: 12,
+                      ),
+                    ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
                       if (r.isActive)
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: () => _confirm(context, 'রিকোয়েস্ট বন্ধ করবেন?', (msgr) async {
-                              final ok = await AdminService.instance.closeRequest(r.id);
-                              msgr
-                                ..hideCurrentSnackBar()
-                                ..showSnackBar(SnackBar(content: Text(ok ? 'বন্ধ হয়েছে' : 'ব্যর্থ')));
-                            }),
-                            style: _smallBtn(BorderSide(color: AppColors.urgent)),
-                            icon: const Icon(Icons.stop_circle_outlined, size: 16, color: AppColors.urgent),
-                            label: const Text('বন্ধ', style: TextStyle(color: AppColors.urgent, fontSize: 12)),
+                            onPressed: () => _confirm(
+                              context,
+                              'রিকোয়েস্ট বন্ধ করবেন?',
+                              (msgr) async {
+                                final ok = await AdminService.instance
+                                    .closeRequest(r.id);
+                                msgr
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        ok ? 'বন্ধ হয়েছে' : 'ব্যর্থ',
+                                      ),
+                                    ),
+                                  );
+                              },
+                            ),
+                            style: _smallBtn(
+                              BorderSide(color: AppColors.urgent),
+                            ),
+                            icon: const Icon(
+                              Icons.stop_circle_outlined,
+                              size: 16,
+                              color: AppColors.urgent,
+                            ),
+                            label: const Text(
+                              'বন্ধ',
+                              style: TextStyle(
+                                color: AppColors.urgent,
+                                fontSize: 12,
+                              ),
+                            ),
                           ),
                         ),
                       if (r.isActive) const SizedBox(width: 8),
                       Expanded(
                         child: OutlinedButton.icon(
-                          onPressed: () => _confirm(context, 'রিকোয়েস্ট মুছবেন?', (msgr) async {
-                            final ok = await AdminService.instance.deleteRequest(r.id);
-                            msgr
-                              ..hideCurrentSnackBar()
-                              ..showSnackBar(SnackBar(content: Text(ok ? 'মুছে ফেলা হয়েছে' : 'ব্যর্থ')));
-                          }),
-                          style: _smallBtn(BorderSide(color: AppColors.critical)),
-                          icon: const Icon(Icons.delete_outline_rounded, size: 16, color: AppColors.critical),
-                          label: const Text('ডিলিট', style: TextStyle(color: AppColors.critical, fontSize: 12)),
+                          onPressed: () => _confirm(
+                            context,
+                            'রিকোয়েস্ট মুছবেন?',
+                            (msgr) async {
+                              final ok = await AdminService.instance
+                                  .deleteRequest(r.id);
+                              msgr
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      ok ? 'মুছে ফেলা হয়েছে' : 'ব্যর্থ',
+                                    ),
+                                  ),
+                                );
+                            },
+                          ),
+                          style: _smallBtn(
+                            BorderSide(color: AppColors.critical),
+                          ),
+                          icon: const Icon(
+                            Icons.delete_outline_rounded,
+                            size: 16,
+                            color: AppColors.critical,
+                          ),
+                          label: const Text(
+                            'ডিলিট',
+                            style: TextStyle(
+                              color: AppColors.critical,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -405,26 +549,32 @@ class _RequestsTab extends StatelessWidget {
   }
 
   ButtonStyle _smallBtn(BorderSide side) => OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        side: side,
-      );
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    side: side,
+  );
 
   Future<void> _confirm(
-      BuildContext context,
-      String msg,
-      Future<void> Function(ScaffoldMessengerState msgr) action) async {
+    BuildContext context,
+    String msg,
+    Future<void> Function(ScaffoldMessengerState msgr) action,
+  ) async {
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('নিশ্চিত করুন'),
-        content: Text(msg, style: const TextStyle(color: AppColors.textSecondary)),
+        content: Text(
+          msg,
+          style: const TextStyle(color: AppColors.textSecondary),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.textSecondary,
+            ),
             child: const Text('না'),
           ),
           TextButton(
@@ -443,8 +593,64 @@ class _RequestsTab extends StatelessWidget {
   }
 }
 
-class _UsersTab extends StatelessWidget {
+class _UsersTab extends StatefulWidget {
   const _UsersTab();
+
+  @override
+  State<_UsersTab> createState() => _UsersTabState();
+}
+
+class _UsersTabState extends State<_UsersTab> {
+  List<String> _admins = const [];
+  List<String> _managers = const [];
+  bool _busy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRoles();
+  }
+
+  Future<void> _loadRoles() async {
+    final r = await AdminService.instance.fetchRoles();
+    if (!mounted) return;
+    setState(() {
+      _admins = r.admins;
+      _managers = r.managers;
+    });
+  }
+
+  void _toast(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  bool _isAdminUser(AppUser u) => _admins.contains(u.uid);
+  bool _isManagerUser(AppUser u) => _managers.contains(u.uid);
+
+  Future<void> _toggleManager(BuildContext context, AppUser u) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    final isManager = _managers.contains(u.uid);
+    final newList = isManager
+        ? _managers.where((x) => x != u.uid).toList()
+        : [..._managers, u.uid];
+    final res = await AdminService.instance.saveAppMeta(managers: newList);
+    if (!context.mounted) return;
+    setState(() => _busy = false);
+    if (res.ok) {
+      setState(() => _managers = newList);
+      _toast(
+        context,
+        isManager
+            ? '${u.name} কে ম্যানেজার থেকে সরানো হয়েছে'
+            : '${u.name} এখন ম্যানেজার ✓',
+      );
+    } else {
+      _toast(context, res.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -455,8 +661,10 @@ class _UsersTab extends StatelessWidget {
         final list = snap.data ?? const [];
         if (list.isEmpty) {
           return const Center(
-            child: Text('এখনো কোনো ইউজার নেই',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(
+              'এখনো কোনো ইউজার নেই',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
           );
         }
         return ListView.separated(
@@ -469,6 +677,7 @@ class _UsersTab extends StatelessWidget {
               radius: 18,
               padding: const EdgeInsets.all(14),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: 42,
@@ -479,14 +688,21 @@ class _UsersTab extends StatelessWidget {
                           ? AppColors.critical.withValues(alpha: 0.15)
                           : AppColors.primary.withValues(alpha: 0.15),
                       border: Border.all(
-                          color: u.banned ? AppColors.critical : AppColors.primary, width: 1.2),
+                        color: u.banned
+                            ? AppColors.critical
+                            : AppColors.primary,
+                        width: 1.2,
+                      ),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       u.name.characters.firstOrNull?.toUpperCase() ?? '?',
                       style: TextStyle(
-                          color: u.banned ? AppColors.critical : AppColors.primary,
-                          fontWeight: FontWeight.w800),
+                        color: u.banned
+                            ? AppColors.critical
+                            : AppColors.primary,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -494,47 +710,77 @@ class _UsersTab extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(u.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 2),
-                        Text('${u.bloodGroup} · ${u.donations} ডোনেশন',
-                            style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
-                        Text(u.phone.isEmpty ? '(নম্বর নেয়নি)' : u.phone,
-                            style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                        Text(
+                          u.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Wrap(
+                          spacing: 5,
+                          runSpacing: 4,
+                          children: [
+                            if (_isAdminUser(u))
+                              _roleChip(
+                                context,
+                                'অ্যাডমিন',
+                                AppColors.gold,
+                                Icons.shield_outlined,
+                              ),
+                            if (_isManagerUser(u))
+                              _roleChip(
+                                context,
+                                'ম্যানেজার',
+                                AppColors.info,
+                                Icons.admin_panel_settings_outlined,
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          '${u.bloodGroup} · ${u.donations} ডোনেশন',
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          u.phone.isEmpty ? '(নম্বর নেয়নি)' : u.phone,
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(width: 8),
-                  if (!u.banned)
-                    GestureDetector(
-                      onTap: () => _toggle(context, u, true),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                        decoration: BoxDecoration(
-                          color: AppColors.critical.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.critical, width: 1),
-                        ),
-                        child: const Text('ব্যান',
-                            style: TextStyle(color: AppColors.critical, fontSize: 11, fontWeight: FontWeight.w700)),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _smallBtn(
+                        label: _isManagerUser(u)
+                            ? 'ম্যানেজার ✕'
+                            : 'ম্যানেজার করুন',
+                        color: _isManagerUser(u)
+                            ? AppColors.normal
+                            : AppColors.info,
+                        busy: _busy,
+                        onTap: () => _toggleManager(context, u),
                       ),
-                    )
-                  else
-                    GestureDetector(
-                      onTap: () => _toggle(context, u, false),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                        decoration: BoxDecoration(
-                          color: AppColors.normal.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.normal, width: 1),
-                        ),
-                        child: const Text('আনব্যান',
-                            style: TextStyle(color: AppColors.normal, fontSize: 11, fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 6),
+                      _smallBtn(
+                        label: u.banned ? 'আনব্যান' : 'ব্যান',
+                        color: u.banned ? AppColors.normal : AppColors.critical,
+                        onTap: () => _toggleBanned(context, u),
                       ),
-                    ),
+                    ],
+                  ),
                 ],
               ),
             );
@@ -544,12 +790,70 @@ class _UsersTab extends StatelessWidget {
     );
   }
 
-  Future<void> _toggle(BuildContext context, AppUser u, bool banned) async {
-    final ok = await AdminService.instance.setUserBanned(u.uid, banned);
-    if (context.mounted) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(ok ? (banned ? '${u.name} ব্যান হয়েছে' : 'আনব্যান হয়েছে') : 'ব্যর্থ')));
-    }
+  Widget _roleChip(
+    BuildContext context,
+    String label,
+    Color color,
+    IconData icon,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.13),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: color),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _smallBtn({
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+    bool busy = false,
+  }) {
+    return GestureDetector(
+      onTap: busy ? null : onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.13),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: color, width: 1),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: color,
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _toggleBanned(BuildContext context, AppUser u) async {
+    final ok = await AdminService.instance.setUserBanned(u.uid, !u.banned);
+    if (!context.mounted) return;
+    _toast(
+      context,
+      ok ? (u.banned ? 'আনব্যান হয়েছে' : '${u.name} ব্যান হয়েছে') : 'ব্যর্থ',
+    );
   }
 }

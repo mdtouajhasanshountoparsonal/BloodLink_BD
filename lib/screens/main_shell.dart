@@ -71,11 +71,39 @@ class _NavBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Expanded(child: _NavItem(icon: Icons.home_rounded, label: 'হোম', selected: index == 0, onTap: () => onSelect(0))),
-          Expanded(child: _NavItem(icon: Icons.notifications_rounded, label: 'রিকোয়েস্ট', selected: index == 1, onTap: () => onSelect(1))),
+          Expanded(
+            child: _NavItem(
+              icon: Icons.home_rounded,
+              label: 'হোম',
+              selected: index == 0,
+              onTap: () => onSelect(0),
+            ),
+          ),
+          Expanded(
+            child: _NavItem(
+              icon: Icons.notifications_rounded,
+              label: 'রিকোয়েস্ট',
+              selected: index == 1,
+              onTap: () => onSelect(1),
+            ),
+          ),
           _DonateFab(selected: index == 2, onTap: () => onSelect(2)),
-          Expanded(child: _NavItem(icon: Icons.explore_rounded, label: 'কাছাকাছি', selected: index == 3, onTap: () => onSelect(3))),
-          Expanded(child: _NavItem(icon: Icons.person_rounded, label: 'প্রোফাইল', selected: index == 4, onTap: () => onSelect(4))),
+          Expanded(
+            child: _NavItem(
+              icon: Icons.explore_rounded,
+              label: 'কাছাকাছি',
+              selected: index == 3,
+              onTap: () => onSelect(3),
+            ),
+          ),
+          Expanded(
+            child: _NavItem(
+              icon: Icons.person_rounded,
+              label: 'প্রোফাইল',
+              selected: index == 4,
+              onTap: () => onSelect(4),
+            ),
+          ),
         ],
       ),
     );
@@ -110,7 +138,9 @@ class _NavItem extends StatelessWidget {
             curve: Curves.easeOut,
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
             decoration: BoxDecoration(
-              color: selected ? AppColors.primary.withValues(alpha: 0.14) : Colors.transparent,
+              color: selected
+                  ? AppColors.primary.withValues(alpha: 0.14)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(icon, size: 23, color: color),

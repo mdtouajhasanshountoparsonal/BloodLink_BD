@@ -20,11 +20,11 @@ class _RequestsScreenState extends State<RequestsScreen> {
   final _search = TextEditingController();
 
   Urgency? _urgencyOf(String label) => switch (label) {
-        'জরুরি' => Urgency.critical,
-        'দ্রুত' => Urgency.urgent,
-        'সাধারণ' => Urgency.normal,
-        _ => null,
-      };
+    'জরুরি' => Urgency.critical,
+    'দ্রুত' => Urgency.urgent,
+    'সাধারণ' => Urgency.normal,
+    _ => null,
+  };
 
   @override
   void dispose() {
@@ -46,17 +46,27 @@ class _RequestsScreenState extends State<RequestsScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: Text('রক্তের রিকোয়েস্ট', style: Theme.of(context).textTheme.headlineMedium),
+                      child: Text(
+                        'রক্তের রিকোয়েস্ট',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.14),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: const Text(
                         'সক্রিয়',
-                        style: TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w700),
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
@@ -88,16 +98,26 @@ class _RequestsScreenState extends State<RequestsScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 18),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: selected ? AppColors.primary : AppColors.surface,
+                            color: selected
+                                ? AppColors.primary
+                                : AppColors.surface,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: selected ? AppColors.primary : AppColors.border),
+                            border: Border.all(
+                              color: selected
+                                  ? AppColors.primary
+                                  : AppColors.border,
+                            ),
                           ),
                           child: Text(
                             f,
                             style: TextStyle(
-                              color: selected ? Colors.white : AppColors.textSecondary,
+                              color: selected
+                                  ? Colors.white
+                                  : AppColors.textSecondary,
                               fontSize: 13,
-                              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                              fontWeight: selected
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
                             ),
                           ),
                         ),
@@ -114,14 +134,23 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     ),
                     builder: (context, snap) {
                       if (snap.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
+                        );
                       }
                       if (snap.hasError) {
                         return Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text('রিকোয়েস্ট লোড করা যায়নি', style: TextStyle(color: AppColors.textSecondary)),
+                              const Text(
+                                'রিকোয়েস্ট লোড করা যায়নি',
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
                               const SizedBox(height: 10),
                               TextButton(
                                 onPressed: () => setState(() {}),
@@ -134,7 +163,10 @@ class _RequestsScreenState extends State<RequestsScreen> {
                       final results = snap.data ?? const <BloodRequest>[];
                       if (results.isEmpty) {
                         return const Center(
-                          child: Text('কোনো রিকোয়েস্ট পাওয়া যায়নি', style: TextStyle(color: AppColors.textSecondary)),
+                          child: Text(
+                            'কোনো রিকোয়েস্ট পাওয়া যায়নি',
+                            style: TextStyle(color: AppColors.textSecondary),
+                          ),
                         );
                       }
                       return ListView.separated(
@@ -144,7 +176,10 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         itemBuilder: (context, i) => RequestCard(
                           request: results[i],
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => RequestDetailScreen(request: results[i])),
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  RequestDetailScreen(request: results[i]),
+                            ),
                           ),
                         ),
                       );

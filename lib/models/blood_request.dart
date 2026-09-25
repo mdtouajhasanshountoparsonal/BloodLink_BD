@@ -64,15 +64,16 @@ class BloodRequest {
 
   bool get isClosed => isExpired || isFulfilled;
 
-  bool expiredByTime(DateTime now) => status != 'expired' && expiresAt.isBefore(now);
+  bool expiredByTime(DateTime now) =>
+      status != 'expired' && expiresAt.isBefore(now);
 
   bool get isMine => uid.isNotEmpty;
 
   static Duration lifetimeFor(Urgency urgency) => switch (urgency) {
-        Urgency.critical => const Duration(hours: 6),
-        Urgency.urgent => const Duration(hours: 12),
-        Urgency.normal => const Duration(hours: 24),
-      };
+    Urgency.critical => const Duration(hours: 6),
+    Urgency.urgent => const Duration(hours: 12),
+    Urgency.normal => const Duration(hours: 24),
+  };
 
   int get lifetimeHours => BloodRequest.lifetimeFor(urgency).inHours;
 
@@ -115,25 +116,25 @@ class BloodRequest {
   }
 
   Map<String, dynamic> toFirestore() => {
-        'id': id,
-        'uid': uid,
-        'patientName': patientName,
-        'bloodGroup': bloodGroup,
-        'hospital': hospital,
-        'area': area,
-        'distanceKm': distanceKm,
-        'bags': bags,
-        'urgency': urgency.name,
-        'neededBy': neededBy,
-        'expiresAt': expiresAt,
-        'responseCount': responseCount,
-        'status': status,
-        'rebroadcastCount': rebroadcastCount,
-        'confirmedDonor': confirmedDonor,
-        'requesterName': requesterName,
-        'requesterPhone': requesterPhone,
-        'latitude': latitude,
-        'longitude': longitude,
-        'createdAt': FieldValue.serverTimestamp(),
-      };
+    'id': id,
+    'uid': uid,
+    'patientName': patientName,
+    'bloodGroup': bloodGroup,
+    'hospital': hospital,
+    'area': area,
+    'distanceKm': distanceKm,
+    'bags': bags,
+    'urgency': urgency.name,
+    'neededBy': neededBy,
+    'expiresAt': expiresAt,
+    'responseCount': responseCount,
+    'status': status,
+    'rebroadcastCount': rebroadcastCount,
+    'confirmedDonor': confirmedDonor,
+    'requesterName': requesterName,
+    'requesterPhone': requesterPhone,
+    'latitude': latitude,
+    'longitude': longitude,
+    'createdAt': FieldValue.serverTimestamp(),
+  };
 }

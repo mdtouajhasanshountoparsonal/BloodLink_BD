@@ -83,10 +83,16 @@ class _ReportScreenState extends State<ReportScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('রিপোর্ট করুন', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'রিপোর্ট করুন',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
               ),
@@ -102,12 +108,20 @@ class _ReportScreenState extends State<ReportScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('কী রিপোর্ট করছেন?',
-                                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700)),
+                            const Text(
+                              'কী রিপোর্ট করছেন?',
+                              style: TextStyle(
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             const Text(
                               'ভুয়া অ্যাকাউন্ট, হয়রানি, ভুল তথ্য — সব রিপোর্ট গোপন থাকে।',
-                              style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 12,
+                              ),
                             ),
                             const SizedBox(height: 14),
                             Row(
@@ -119,23 +133,35 @@ class _ReportScreenState extends State<ReportScreen> {
                                       child: GestureDetector(
                                         onTap: () => setState(() => _kind = k),
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(vertical: 12),
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 12,
+                                          ),
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                             color: _kind == k
-                                                ? AppColors.primary.withValues(alpha: 0.15)
+                                                ? AppColors.primary.withValues(
+                                                    alpha: 0.15,
+                                                  )
                                                 : AppColors.surface,
-                                            borderRadius: BorderRadius.circular(14),
+                                            borderRadius: BorderRadius.circular(
+                                              14,
+                                            ),
                                             border: Border.all(
-                                              color: _kind == k ? AppColors.primary : AppColors.border,
+                                              color: _kind == k
+                                                  ? AppColors.primary
+                                                  : AppColors.border,
                                               width: _kind == k ? 1.5 : 1,
                                             ),
                                           ),
                                           child: Column(
                                             children: [
-                                              Icon(icon,
-                                                  size: 18,
-                                                  color: _kind == k ? AppColors.primary : AppColors.textSecondary),
+                                              Icon(
+                                                icon,
+                                                size: 18,
+                                                color: _kind == k
+                                                    ? AppColors.primary
+                                                    : AppColors.textSecondary,
+                                              ),
                                               const SizedBox(height: 5),
                                               Text(
                                                 label,
@@ -143,7 +169,9 @@ class _ReportScreenState extends State<ReportScreen> {
                                                 style: TextStyle(
                                                   fontSize: 10.5,
                                                   fontWeight: FontWeight.w700,
-                                                  color: _kind == k ? AppColors.primary : AppColors.textSecondary,
+                                                  color: _kind == k
+                                                      ? AppColors.primary
+                                                      : AppColors.textSecondary,
                                                 ),
                                               ),
                                             ],
@@ -156,7 +184,10 @@ class _ReportScreenState extends State<ReportScreen> {
                             ),
                             const SizedBox(height: 16),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.surface.withValues(alpha: 0.9),
                                 borderRadius: BorderRadius.circular(16),
@@ -169,7 +200,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                 decoration: const InputDecoration(
                                   hintText: 'বিস্তারিত লিখুন... (কী ঘটেছে? কোন অ্যাকাউন্ট?)',
                                   border: InputBorder.none,
-                                  hintStyle: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                                  hintStyle: TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 13,
+                                  ),
                                 ),
                                 style: const TextStyle(fontSize: 13.5),
                               ),
@@ -182,7 +216,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   gradient: const LinearGradient(
-                                    colors: [AppColors.primarySoft, AppColors.primaryDeep],
+                                    colors: [
+                                      AppColors.primarySoft,
+                                      AppColors.primaryDeep,
+                                    ],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                   ),

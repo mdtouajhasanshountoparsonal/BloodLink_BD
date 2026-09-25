@@ -37,10 +37,16 @@ class _UsageScreenState extends State<UsageScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('ব্যবহার ও কোটা', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'ব্যবহার ও কোটা',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
               ),
@@ -49,7 +55,10 @@ class _UsageScreenState extends State<UsageScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   'এটা এই ডিভাইস/অ্যাপের আনুমানিক হিসাব। আসল সংখ্যা Firebase Console-এ দেখুন।',
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12.5,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -79,35 +88,79 @@ class _UsageScreenState extends State<UsageScreen> {
                     const SizedBox(height: 12),
                     _storageCard(),
                     const SizedBox(height: 20),
-                    const Text('গত ৭ দিন', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                    const Text(
+                      'গত ৭ দিন',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     _weekBars(),
                     const SizedBox(height: 20),
-                    const Text('দিনভিত্তিক ব্যবহার (গত ১৪ দিন)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                    const Text(
+                      'দিনভিত্তিক ব্যবহার (গত ১৪ দিন)',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     _dailyList(),
                     if (byUid.isNotEmpty) ...[
                       const SizedBox(height: 20),
-                      const Text('আজকের রাইট — অ্যাকাউন্ট অনুযায়ী (এই ডিভাইস)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                      const Text(
+                        'আজকের রাইট — অ্যাকাউন্ট অনুযায়ী (এই ডিভাইস)',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const SizedBox(height: 8),
-                      ...byUid.map((e) => _kvTile('${e.$1.substring(0, 6)}…', e.$2, AppColors.gold)),
+                      ...byUid.map(
+                        (e) => _kvTile(
+                          '${e.$1.substring(0, 6)}…',
+                          e.$2,
+                          AppColors.gold,
+                        ),
+                      ),
                     ],
                     if (writesColl.isNotEmpty) ...[
                       const SizedBox(height: 20),
-                      const Text('আজকের রাইট — বিষয় অনুযায়ী', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                      const Text(
+                        'আজকের রাইট — বিষয় অনুযায়ী',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const SizedBox(height: 8),
-                      ...writesColl.map((e) => _kvTile(e.$1, e.$2, AppColors.primary)),
+                      ...writesColl.map(
+                        (e) => _kvTile(e.$1, e.$2, AppColors.primary),
+                      ),
                     ],
                     if (readsColl.isNotEmpty) ...[
                       const SizedBox(height: 20),
-                      const Text('আজকের রিড — বিষয় অনুযায়ী', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                      const Text(
+                        'আজকের রিড — বিষয় অনুযায়ী',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const SizedBox(height: 8),
-                      ...readsColl.map((e) => _kvTile(e.$1, e.$2, AppColors.info)),
+                      ...readsColl.map(
+                        (e) => _kvTile(e.$1, e.$2, AppColors.info),
+                      ),
                     ],
                     const SizedBox(height: 20),
                     const Text(
                       'Spark (ঢু-রে ফ্রি): ৫০,০০০ রিড/দিন, ২০,০০০ রাইট/দিন, ১ GB স্টোরেজ, ১০ GB/মাস ডাউনলোড।\nবাড়তে গেলে Blaze-এ ফ্রি-কোটা শেষ হলে চার্জ লাগতে পারে।',
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.6),
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                        height: 1.6,
+                      ),
                     ),
                   ],
                 ),
@@ -142,11 +195,21 @@ class _UsageScreenState extends State<UsageScreen> {
             children: [
               Icon(icon, size: 18, color: color),
               const SizedBox(width: 8),
-              Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               const Spacer(),
               Text(
                 '$value / $limit $unit',
-                style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  color: color,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ],
           ),
@@ -165,7 +228,10 @@ class _UsageScreenState extends State<UsageScreen> {
             pct >= 1
                 ? 'কোটা পূর্ণ! বাড়ানোর জন্য Blaze-এ যেতে হবে।'
                 : '${(pct * 100).toStringAsFixed(1)}% ব্যবহৃত — বাকি ${limit - value}',
-            style: TextStyle(color: pct >= 1 ? AppColors.critical : AppColors.textSecondary, fontSize: 12),
+            style: TextStyle(
+              color: pct >= 1 ? AppColors.critical : AppColors.textSecondary,
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -185,11 +251,18 @@ class _UsageScreenState extends State<UsageScreen> {
           const Icon(Icons.storage_rounded, size: 18, color: AppColors.gold),
           const SizedBox(width: 10),
           const Expanded(
-            child: Text('স্টোরেজ', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+            child: Text(
+              'স্টোরেজ',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+            ),
           ),
           Text(
             '${SparkLimits.storageGb} GB ফ্রি',
-            style: const TextStyle(color: AppColors.gold, fontSize: 13, fontWeight: FontWeight.w800),
+            style: const TextStyle(
+              color: AppColors.gold,
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ],
       ),
@@ -210,12 +283,20 @@ class _UsageScreenState extends State<UsageScreen> {
     );
   }
 
-  Widget _weekBarRow(String label, List<(String, int)> data, int maxValue, Color color) {
+  Widget _weekBarRow(
+    String label,
+    List<(String, int)> data,
+    int maxValue,
+    Color color,
+  ) {
     return Row(
       children: [
         SizedBox(
           width: 34,
-          child: Text(label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+          ),
         ),
         Expanded(
           child: Row(
@@ -231,15 +312,18 @@ class _UsageScreenState extends State<UsageScreen> {
                         color: AppColors.border,
                         child: Align(
                           alignment: Alignment.bottomCenter,
-                          child: Container(
-                            height: 44 * w,
-                            color: color,
-                          ),
+                          child: Container(height: 44 * w, color: color),
                         ),
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(e.$1, style: const TextStyle(fontSize: 9, color: AppColors.textSecondary)),
+                    Text(
+                      e.$1,
+                      style: const TextStyle(
+                        fontSize: 9,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -262,14 +346,11 @@ class _UsageScreenState extends State<UsageScreen> {
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: AppColors.border),
       ),
-      child: Column(
-        children: [for (final d in data) _dailyRow(d, maxTotal)],
-      ),
+      child: Column(children: [for (final d in data) _dailyRow(d, maxTotal)]),
     );
   }
 
-  Widget _dailyRow(
-      ({String label, int reads, int writes}) d, int maxTotal) {
+  Widget _dailyRow(({String label, int reads, int writes}) d, int maxTotal) {
     final total = d.reads + d.writes;
     final ratio = total == 0
         ? 0.0
@@ -277,17 +358,17 @@ class _UsageScreenState extends State<UsageScreen> {
     final color = ratio >= 0.66
         ? AppColors.critical
         : ratio >= 0.33
-            ? AppColors.urgent
-            : total == 0
-                ? AppColors.border
-                : AppColors.normal;
+        ? AppColors.urgent
+        : total == 0
+        ? AppColors.border
+        : AppColors.normal;
     final label = total == 0
         ? 'ব্যবহার নেই'
         : ratio >= 0.66
-            ? 'বেশি'
-            : ratio >= 0.33
-                ? 'মাঝারি'
-                : 'কম';
+        ? 'বেশি'
+        : ratio >= 0.33
+        ? 'মাঝারি'
+        : 'কম';
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -319,7 +400,10 @@ class _UsageScreenState extends State<UsageScreen> {
                 const SizedBox(height: 3),
                 Text(
                   'রিড ${d.reads} · রাইট ${d.writes}',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 10.5),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 10.5,
+                  ),
                 ),
               ],
             ),
@@ -335,7 +419,10 @@ class _UsageScreenState extends State<UsageScreen> {
                   Container(
                     width: 7,
                     height: 7,
-                    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                   const SizedBox(width: 5),
                   Text(
@@ -367,7 +454,10 @@ class _UsageScreenState extends State<UsageScreen> {
       child: Row(
         children: [
           Expanded(
-            child: Text(k, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+            child: Text(
+              k,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -375,7 +465,14 @@ class _UsageScreenState extends State<UsageScreen> {
               color: color.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(999),
             ),
-            child: Text('$v', style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w800)),
+            child: Text(
+              '$v',
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
         ],
       ),

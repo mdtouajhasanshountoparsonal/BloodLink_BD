@@ -54,7 +54,11 @@ class _BannedScreen extends StatelessWidget {
                       color: AppColors.critical.withValues(alpha: 0.15),
                       border: Border.all(color: AppColors.critical, width: 2),
                     ),
-                    child: const Icon(Icons.gpp_bad_rounded, color: AppColors.critical, size: 40),
+                    child: const Icon(
+                      Icons.gpp_bad_rounded,
+                      color: AppColors.critical,
+                      size: 40,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   const Text(
@@ -66,14 +70,19 @@ class _BannedScreen extends StatelessWidget {
                     'আপনার অ্যাকাউন্টটি প্রশাসনের পক্ষ থেকে বন্ধ করা হয়েছে। '
                     'ভুল হলে অ্যাপের সাহায্য সেকশন থেকে যোগাযোগ করুন।',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColors.textSecondary, height: 1.6),
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      height: 1.6,
+                    ),
                   ),
                   const SizedBox(height: 22),
                   OutlinedButton.icon(
                     onPressed: () => AuthService.instance.signOut(),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.textSecondary),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     icon: const Icon(Icons.logout_rounded, size: 18),
                     label: const Text('লগ আউট'),

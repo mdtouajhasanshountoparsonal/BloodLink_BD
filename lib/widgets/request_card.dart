@@ -12,8 +12,9 @@ class RequestCard extends StatelessWidget {
   final BloodRequest request;
   final VoidCallback? onTap;
 
-  String get _distance =>
-      request.distanceKm >= 10 ? request.distanceKm.toStringAsFixed(0) : request.distanceKm.toStringAsFixed(1);
+  String get _distance => request.distanceKm >= 10
+      ? request.distanceKm.toStringAsFixed(0)
+      : request.distanceKm.toStringAsFixed(1);
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +34,18 @@ class RequestCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          Text(request.patientName, style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            request.patientName,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 10),
           _InfoRow(icon: Icons.local_hospital_outlined, text: request.hospital),
           const SizedBox(height: 6),
           _InfoRow(
             icon: Icons.place_outlined,
-            text: request.distanceKm > 0 ? '${request.area} • $_distance km' : request.area,
+            text: request.distanceKm > 0
+                ? '${request.area} • $_distance km'
+                : request.area,
           ),
           const SizedBox(height: 6),
           _InfoRow(
@@ -58,12 +64,19 @@ class RequestCard extends StatelessWidget {
           ],
           Row(
             children: [
-              Icon(Icons.people_outline, size: 17, color: AppColors.textSecondary),
+              Icon(
+                Icons.people_outline,
+                size: 17,
+                color: AppColors.textSecondary,
+              ),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
                   '${request.responseCount} জন সাড়া দিয়েছেন',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12.5),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12.5,
+                  ),
                 ),
               ),
               Text(
@@ -102,7 +115,13 @@ class _InfoRow extends StatelessWidget {
         Icon(icon, size: 17, color: AppColors.textSecondary),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(text, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 13,
+            ),
+          ),
         ),
       ],
     );

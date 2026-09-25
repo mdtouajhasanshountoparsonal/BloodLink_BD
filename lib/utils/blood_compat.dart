@@ -1,7 +1,16 @@
 class BloodCompat {
   BloodCompat._();
 
-  static const List<String> groups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+  static const List<String> groups = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'O+',
+    'O-',
+    'AB+',
+    'AB-',
+  ];
 
   /// কোন ডোনার কোন রোগীকে দিতে পারবে (রিসিভারের গ্রুপ → কম্প্যাটিবল ডোনার)।
   static const Map<String, List<String>> compatibleDonorsFor = {
@@ -18,8 +27,7 @@ class BloodCompat {
   static bool canDonateTo({
     required String donorGroup,
     required String receiverGroup,
-  }) =>
-      (compatibleDonorsFor[receiverGroup] ?? const []).contains(donorGroup);
+  }) => (compatibleDonorsFor[receiverGroup] ?? const []).contains(donorGroup);
 }
 
 /// রক্তদানের ৯০ দিনের নিয়ম — কবে আবার রক্ত দেওয়া যাবে।
@@ -32,12 +40,17 @@ class DonationEligibility {
   /// - lastDonation null → এখনই পারবেন (eligibleFrom = null)
   /// - remainingDays দিতে পেলে ০; বাকি থাকলে ইতিবাচক
   static ({bool eligible, DateTime? eligibleFrom, int remaining}) forUser(
-      DateTime? lastDonation) {
+    DateTime? lastDonation,
+  ) {
     if (lastDonation == null) {
       return (eligible: true, eligibleFrom: null, remaining: 0);
     }
     final from = lastDonation.add(const Duration(days: gapDays));
     final remaining = from.difference(DateTime.now()).inDays;
-    return (eligible: remaining <= 0, eligibleFrom: from, remaining: remaining < 0 ? 0 : remaining);
+    return (
+      eligible: remaining <= 0,
+      eligibleFrom: from,
+      remaining: remaining < 0 ? 0 : remaining,
+    );
   }
 }

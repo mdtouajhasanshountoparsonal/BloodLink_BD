@@ -9,18 +9,21 @@ class BloodGroupChip extends StatelessWidget {
   final bool compact;
 
   static Color colorOf(String group) => switch (group) {
-        'A+' || 'A-' => AppColors.info,
-        'B+' || 'B-' => AppColors.normal,
-        'AB+' || 'AB-' => AppColors.violet,
-        _ => AppColors.primary,
-      };
+    'A+' || 'A-' => AppColors.info,
+    'B+' || 'B-' => AppColors.normal,
+    'AB+' || 'AB-' => AppColors.violet,
+    _ => AppColors.primary,
+  };
 
   @override
   Widget build(BuildContext context) {
     final color = colorOf(group);
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: compact ? 10 : 14, vertical: compact ? 5 : 8),
+      padding: EdgeInsets.symmetric(
+        horizontal: compact ? 10 : 14,
+        vertical: compact ? 5 : 8,
+      ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(14),

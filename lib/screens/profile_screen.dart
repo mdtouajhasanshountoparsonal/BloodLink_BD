@@ -9,6 +9,7 @@ import '../widgets/background_decor.dart';
 import '../widgets/blood_group_chip.dart';
 import '../widgets/glass_card.dart';
 import 'admin_panel_screen.dart';
+import 'animation_settings_screen.dart';
 import 'blood_list_screen.dart';
 import 'edit_profile_screen.dart';
 import 'help_screen.dart';
@@ -59,7 +60,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.textSecondary,
+            ),
             child: const Text('না'),
           ),
           TextButton(
@@ -83,9 +86,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _open(Widget screen) {
-    return Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => screen),
-    );
+    return Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => screen));
   }
 
   @override
@@ -107,10 +109,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 20),
                 _DonationStatusCard(user: _user),
                 const SizedBox(height: 22),
-                const Text('সেটিংস', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+                const Text(
+                  'সেটিংস',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                ),
                 const SizedBox(height: 12),
                 GlassCard(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
                   child: Column(
                     children: [
                       if (_isAdmin) ...[
@@ -137,6 +145,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.notifications_none_rounded,
                         label: 'নোটিফিকেশন',
                         onTap: () => _open(const NotificationSettingsScreen()),
+                      ),
+                      const _Divider(),
+                      _MenuTile(
+                        icon: Icons.water_drop_outlined,
+                        label: 'ভিজ্যুয়াল (কার্ড অ্যানিমেশন)',
+                        onTap: () => _open(const AnimationSettingsScreen()),
                       ),
                       const _Divider(),
                       _MenuTile(
@@ -213,7 +227,11 @@ class _ProfileHeader extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               letter,
-              style: const TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w800),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 26,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
           const SizedBox(width: 16),
@@ -221,12 +239,19 @@ class _ProfileHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: Theme.of(context).textTheme.titleLarge, overflow: TextOverflow.ellipsis),
+                Text(
+                  name,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 const SizedBox(height: 4),
                 Text(
                   area,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Row(
@@ -234,14 +259,19 @@ class _ProfileHeader extends StatelessWidget {
                     BloodGroupChip(group: group, compact: true),
                     const SizedBox(width: 8),
                     Icon(
-                      verified ? Icons.verified_rounded : Icons.gpp_maybe_outlined,
+                      verified
+                          ? Icons.verified_rounded
+                          : Icons.gpp_maybe_outlined,
                       color: verified ? AppColors.info : AppColors.urgent,
                       size: 17,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       verified ? 'ভেরিফাইড ডোনার' : 'ভেরিফাইড নয়',
-                      style: TextStyle(color: verified ? AppColors.info : AppColors.urgent, fontSize: 12),
+                      style: TextStyle(
+                        color: verified ? AppColors.info : AppColors.urgent,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -295,7 +325,11 @@ class _StatGrid extends StatelessWidget {
 }
 
 class _StatTile extends StatelessWidget {
-  const _StatTile({required this.number, required this.label, required this.color});
+  const _StatTile({
+    required this.number,
+    required this.label,
+    required this.color,
+  });
 
   final String number;
   final String label;
@@ -312,14 +346,22 @@ class _StatTile extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               number,
-              style: TextStyle(color: color, fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: -0.5),
+              style: TextStyle(
+                color: color,
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -0.5,
+              ),
             ),
           ),
           const SizedBox(height: 4),
           Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 11,
+            ),
           ),
         ],
       ),
@@ -332,8 +374,7 @@ class _DonationStatusCard extends StatelessWidget {
 
   final AppUser? user;
 
-  static String _fmt(DateTime t) =>
-      '${t.day}/${t.month}/${t.year}';
+  static String _fmt(DateTime t) => '${t.day}/${t.month}/${t.year}';
 
   @override
   Widget build(BuildContext context) {
@@ -363,18 +404,29 @@ class _DonationStatusCard extends StatelessWidget {
               children: [
                 Text(
                   'সর্বশেষ রক্তদান: ${last == null ? 'এখনো দেননি' : _fmt(last)}',
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 3),
                 if (win.eligible)
                   const Text(
                     'এখনই রক্ত দিতে পারেন',
-                    style: TextStyle(color: AppColors.normal, fontSize: 12.5, fontWeight: FontWeight.w800),
+                    style: TextStyle(
+                      color: AppColors.normal,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w800,
+                    ),
                   )
                 else
                   Text(
                     'আবার পারবেন: ${_fmt(win.eligibleFrom!)} — আর ${win.remaining} দিন বাকি',
-                    style: const TextStyle(color: AppColors.urgent, fontSize: 12.5, fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                      color: AppColors.urgent,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
               ],
             ),
@@ -414,20 +466,33 @@ class _ReputationCard extends StatelessWidget {
                   color: AppColors.gold.withValues(alpha: 0.14),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.military_tech, color: AppColors.gold, size: 22),
+                child: const Icon(
+                  Icons.military_tech,
+                  color: AppColors.gold,
+                  size: 22,
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('$tier ডোনার', style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                    Text(
+                      '$tier ডোনার',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                     const SizedBox(height: 3),
                     Text(
                       full
                           ? 'সর্বোচ্চ সম্মান অর্জন হয়েছে — ধন্যবাদ!'
                           : '$nextTier হতে আর $left টি ডোনেশন বাকি',
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -507,7 +572,12 @@ class _TierDot extends StatelessWidget {
 }
 
 class _MenuTile extends StatelessWidget {
-  const _MenuTile({required this.icon, required this.label, this.destructive = false, this.onTap});
+  const _MenuTile({
+    required this.icon,
+    required this.label,
+    this.destructive = false,
+    this.onTap,
+  });
 
   final IconData icon;
   final String label;
@@ -525,12 +595,27 @@ class _MenuTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
         child: Row(
           children: [
-            Icon(icon, size: 20, color: destructive ? AppColors.critical : AppColors.textSecondary),
+            Icon(
+              icon,
+              size: 20,
+              color: destructive ? AppColors.critical : AppColors.textSecondary,
+            ),
             const SizedBox(width: 14),
             Expanded(
-              child: Text(label, style: TextStyle(color: color, fontSize: 14, fontWeight: FontWeight.w600)),
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
-            Icon(Icons.chevron_right, size: 20, color: destructive ? AppColors.critical : AppColors.textSecondary),
+            Icon(
+              Icons.chevron_right,
+              size: 20,
+              color: destructive ? AppColors.critical : AppColors.textSecondary,
+            ),
           ],
         ),
       ),
@@ -543,6 +628,11 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(height: 1, indent: 46, endIndent: 12, color: AppColors.border);
+    return const Divider(
+      height: 1,
+      indent: 46,
+      endIndent: 12,
+      color: AppColors.border,
+    );
   }
 }

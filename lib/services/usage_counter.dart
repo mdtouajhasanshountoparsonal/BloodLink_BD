@@ -35,17 +35,25 @@ class UsageCounter {
     for (final part in reads.split('|')) {
       if (part.isEmpty) continue;
       final i = part.indexOf(':');
-      if (i > 0) _reads[part.substring(0, i)] = int.tryParse(part.substring(i + 1)) ?? 0;
+      if (i > 0) {
+        _reads[part.substring(0, i)] = int.tryParse(part.substring(i + 1)) ?? 0;
+      }
     }
     for (final part in writes.split('|')) {
       if (part.isEmpty) continue;
       final i = part.indexOf(':');
-      if (i > 0) _writes[part.substring(0, i)] = int.tryParse(part.substring(i + 1)) ?? 0;
+      if (i > 0) {
+        _writes[part.substring(0, i)] =
+            int.tryParse(part.substring(i + 1)) ?? 0;
+      }
     }
     for (final part in byUid.split('|')) {
       if (part.isEmpty) continue;
       final i = part.indexOf(':');
-      if (i > 0) _writesByUid[part.substring(0, i)] = int.tryParse(part.substring(i + 1)) ?? 0;
+      if (i > 0) {
+        _writesByUid[part.substring(0, i)] =
+            int.tryParse(part.substring(i + 1)) ?? 0;
+      }
     }
     _ready = true;
   }
@@ -113,7 +121,14 @@ class UsageCounter {
 
   /// শেষ ৭ দিনের (আজসহ) মোট read — ধারণা ও ছোট গ্রাফের জন্য।
   static const List<String> _weekdays = [
-    'সোম', 'মঙ্গল', 'বুধ', 'বৃহস্পতি', 'শুক্র', 'শনি', 'রবি'];
+    'সোম',
+    'মঙ্গল',
+    'বুধ',
+    'বৃহস্পতি',
+    'শুক্র',
+    'শনি',
+    'রবি',
+  ];
 
   List<(String, int)> lastSevenDaysReads() {
     final now = DateTime.now();

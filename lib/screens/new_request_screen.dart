@@ -100,10 +100,16 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('ইমার্জেন্সি রিকোয়েস্ট', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'ইমার্জেন্সি রিকোয়েস্ট',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -128,16 +134,27 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                         onTap: () => setState(() => _bloodGroup = g),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 160),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 9,
+                          ),
                           decoration: BoxDecoration(
-                            color: _bloodGroup == g ? AppColors.primary : AppColors.surface,
+                            color: _bloodGroup == g
+                                ? AppColors.primary
+                                : AppColors.surface,
                             borderRadius: BorderRadius.circular(13),
-                            border: Border.all(color: _bloodGroup == g ? AppColors.primary : AppColors.border),
+                            border: Border.all(
+                              color: _bloodGroup == g
+                                  ? AppColors.primary
+                                  : AppColors.border,
+                            ),
                           ),
                           child: Text(
                             g,
                             style: TextStyle(
-                              color: _bloodGroup == g ? Colors.white : AppColors.textSecondary,
+                              color: _bloodGroup == g
+                                  ? Colors.white
+                                  : AppColors.textSecondary,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
@@ -185,24 +202,37 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                         child: Row(
                           children: [
                             GestureDetector(
-                              onTap: () => setState(() => _bags = _bags > 1 ? _bags - 1 : 1),
+                              onTap: () => setState(
+                                () => _bags = _bags > 1 ? _bags - 1 : 1,
+                              ),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
-                                child: Icon(Icons.remove_circle_outline, color: AppColors.primary, size: 22),
+                                child: Icon(
+                                  Icons.remove_circle_outline,
+                                  color: AppColors.primary,
+                                  size: 22,
+                                ),
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 '$_bags',
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w800,
+                                ),
                               ),
                             ),
                             GestureDetector(
                               onTap: () => setState(() => _bags++),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
-                                child: Icon(Icons.add_circle_outline, color: AppColors.primary, size: 22),
+                                child: Icon(
+                                  Icons.add_circle_outline,
+                                  color: AppColors.primary,
+                                  size: 22,
+                                ),
                               ),
                             ),
                           ],
@@ -223,13 +253,20 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.schedule, size: 19, color: AppColors.textSecondary),
+                              const Icon(
+                                Icons.schedule,
+                                size: 19,
+                                color: AppColors.textSecondary,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   _fmt(_neededBy),
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
+                                  style: const TextStyle(
+                                    color: AppColors.textPrimary,
+                                    fontSize: 13,
+                                  ),
                                 ),
                               ),
                             ],
@@ -254,10 +291,14 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                               duration: const Duration(milliseconds: 180),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               decoration: BoxDecoration(
-                                color: _urgency == u ? u.color.withValues(alpha: 0.18) : AppColors.surface,
+                                color: _urgency == u
+                                    ? u.color.withValues(alpha: 0.18)
+                                    : AppColors.surface,
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: _urgency == u ? u.color : AppColors.border,
+                                  color: _urgency == u
+                                      ? u.color
+                                      : AppColors.border,
                                   width: _urgency == u ? 1.6 : 1,
                                 ),
                               ),
@@ -272,7 +313,13 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 6),
-                                  Text(u.label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                                  Text(
+                                    u.label,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -284,7 +331,10 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'রিকোয়েস্ট ${BloodRequest.lifetimeFor(_urgency).inHours} ঘণ্টা সক্রিয় থাকবে — মেয়াদ শেষে পুনরায় পাঠাতে পারবেন',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 11.5),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11.5,
+                  ),
                 ),
                 const SizedBox(height: 28),
                 GlassButton(
@@ -302,12 +352,16 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
 
   String _fmt(DateTime t) {
     final d = '${t.day}/${t.month}/${t.year}';
-    final time = '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
+    final time =
+        '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
     return '$d $time';
   }
 
   Widget _fieldLabel(String text) {
-    return Text(text, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700));
+    return Text(
+      text,
+      style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700),
+    );
   }
 
   Future<void> _pickDateTime(BuildContext context) async {
@@ -319,10 +373,19 @@ class _NewRequestScreenState extends State<NewRequestScreen> {
     );
     if (date == null) return;
     if (!context.mounted) return;
-    final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(_neededBy));
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_neededBy),
+    );
     if (time == null) return;
     setState(() {
-      _neededBy = DateTime(date.year, date.month, date.day, time.hour, time.minute);
+      _neededBy = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
     });
   }
 }

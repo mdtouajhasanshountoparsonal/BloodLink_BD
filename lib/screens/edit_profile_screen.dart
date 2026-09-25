@@ -110,10 +110,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
-                    Text('প্রোফাইল এডিট', style: Theme.of(context).textTheme.headlineMedium),
+                    Text(
+                      'প্রোফাইল এডিট',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -139,16 +145,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         onTap: () => setState(() => _bloodGroup = g),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 160),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 9,
+                          ),
                           decoration: BoxDecoration(
-                            color: _bloodGroup == g ? AppColors.primary : AppColors.surface,
+                            color: _bloodGroup == g
+                                ? AppColors.primary
+                                : AppColors.surface,
                             borderRadius: BorderRadius.circular(13),
-                            border: Border.all(color: _bloodGroup == g ? AppColors.primary : AppColors.border),
+                            border: Border.all(
+                              color: _bloodGroup == g
+                                  ? AppColors.primary
+                                  : AppColors.border,
+                            ),
                           ),
                           child: Text(
                             g,
                             style: TextStyle(
-                              color: _bloodGroup == g ? Colors.white : AppColors.textSecondary,
+                              color: _bloodGroup == g
+                                  ? Colors.white
+                                  : AppColors.textSecondary,
                               fontWeight: FontWeight.w800,
                             ),
                           ),
@@ -173,16 +190,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Row(
                   children: [
                     Icon(
-                      _verified ? Icons.verified_rounded : Icons.gpp_maybe_outlined,
+                      _verified
+                          ? Icons.verified_rounded
+                          : Icons.gpp_maybe_outlined,
                       size: 18,
                       color: _verified ? AppColors.normal : AppColors.urgent,
                     ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        _verified ? 'নম্বর যাচাই করা আছে' : 'নম্বর যাচাই করা হয়নি',
+                        _verified
+                            ? 'নম্বর যাচাই করা আছে'
+                            : 'নম্বর যাচাই করা হয়নি',
                         style: TextStyle(
-                          color: _verified ? AppColors.normal : AppColors.urgent,
+                          color: _verified
+                              ? AppColors.normal
+                              : AppColors.urgent,
                           fontSize: 12.5,
                           fontWeight: FontWeight.w700,
                         ),
@@ -215,24 +238,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Row(
                     children: [
                       GestureDetector(
-                        onTap: () => setState(() => _donations = _donations > 0 ? _donations - 1 : 0),
+                        onTap: () => setState(
+                          () =>
+                              _donations = _donations > 0 ? _donations - 1 : 0,
+                        ),
                         child: const Padding(
                           padding: EdgeInsets.all(10),
-                          child: Icon(Icons.remove_circle_outline, color: AppColors.primary, size: 22),
+                          child: Icon(
+                            Icons.remove_circle_outline,
+                            color: AppColors.primary,
+                            size: 22,
+                          ),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           '$_donations',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () => setState(() => _donations++),
                         child: const Padding(
                           padding: EdgeInsets.all(10),
-                          child: Icon(Icons.add_circle_outline, color: AppColors.primary, size: 22),
+                          child: Icon(
+                            Icons.add_circle_outline,
+                            color: AppColors.primary,
+                            size: 22,
+                          ),
                         ),
                       ),
                     ],
@@ -253,7 +290,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.calendar_month_outlined, size: 20, color: AppColors.textSecondary),
+                        const Icon(
+                          Icons.calendar_month_outlined,
+                          size: 20,
+                          color: AppColors.textSecondary,
+                        ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
@@ -261,13 +302,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 ? 'নির্বাচন করুন'
                                 : _fmt(_lastDonation!),
                             style: TextStyle(
-                              color: _lastDonation == null ? AppColors.textSecondary : AppColors.textPrimary,
+                              color: _lastDonation == null
+                                  ? AppColors.textSecondary
+                                  : AppColors.textPrimary,
                               fontSize: 13.5,
-                              fontWeight: _lastDonation == null ? FontWeight.w500 : FontWeight.w700,
+                              fontWeight: _lastDonation == null
+                                  ? FontWeight.w500
+                                  : FontWeight.w700,
                             ),
                           ),
                         ),
-                        const Icon(Icons.chevron_right, size: 20, color: AppColors.textSecondary),
+                        const Icon(
+                          Icons.chevron_right,
+                          size: 20,
+                          color: AppColors.textSecondary,
+                        ),
                       ],
                     ),
                   ),
@@ -287,11 +336,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _label(String text) {
-    return Text(text, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700));
+    return Text(
+      text,
+      style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700),
+    );
   }
 
   String _fmt(DateTime t) {
-    const months = ['', 'জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+    const months = [
+      '',
+      'জানুয়ারি',
+      'ফেব্রুয়ারি',
+      'মার্চ',
+      'এপ্রিল',
+      'মে',
+      'জুন',
+      'জুলাই',
+      'আগস্ট',
+      'সেপ্টেম্বর',
+      'অক্টোবর',
+      'নভেম্বর',
+      'ডিসেম্বর',
+    ];
     return '${t.day} ${months[t.month]} ${t.year}';
   }
 }

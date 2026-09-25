@@ -40,7 +40,10 @@ class DonorCard extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
-                colors: [groupColor.withValues(alpha: 0.9), groupColor.withValues(alpha: 0.45)],
+                colors: [
+                  groupColor.withValues(alpha: 0.9),
+                  groupColor.withValues(alpha: 0.45),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -48,7 +51,11 @@ class DonorCard extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               donor.bloodGroup,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+                fontSize: 15,
+              ),
             ),
           ),
           const SizedBox(width: 14),
@@ -67,18 +74,29 @@ class DonorCard extends StatelessWidget {
                     ),
                     if (donor.verified) ...[
                       const SizedBox(width: 6),
-                      const Icon(Icons.verified, color: AppColors.info, size: 17),
+                      const Icon(
+                        Icons.verified,
+                        color: AppColors.info,
+                        size: 17,
+                      ),
                     ],
                   ],
                 ),
                 const SizedBox(height: 5),
                 Row(
                   children: [
-                    const Icon(Icons.near_me, size: 14, color: AppColors.textSecondary),
+                    const Icon(
+                      Icons.near_me,
+                      size: 14,
+                      color: AppColors.textSecondary,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       '${donor.distanceKm.toStringAsFixed(1)} km • ${donor.donations} বার ডোনেশন',
-                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -101,9 +119,17 @@ class DonorCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               if (onWhatsApp != null)
-                _RoundAction(icon: Icons.chat_rounded, color: AppColors.normal, onTap: onWhatsApp)
+                _RoundAction(
+                  icon: Icons.chat_rounded,
+                  color: AppColors.normal,
+                  onTap: onWhatsApp,
+                )
               else
-                _RoundAction(icon: Icons.chat_bubble_outline, color: AppColors.info, onTap: onChat),
+                _RoundAction(
+                  icon: Icons.chat_bubble_outline,
+                  color: AppColors.info,
+                  onTap: onChat,
+                ),
             ],
           ),
         ],
@@ -122,10 +148,10 @@ class _ScorePill extends StatelessWidget {
     final color = score >= 85
         ? AppColors.normal
         : score >= 70
-            ? AppColors.info
-            : score >= 55
-                ? AppColors.urgent
-                : AppColors.critical;
+        ? AppColors.info
+        : score >= 55
+        ? AppColors.urgent
+        : AppColors.critical;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -143,7 +169,11 @@ class _ScorePill extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 '$score% ম্যাচ',
-                style: TextStyle(color: color, fontSize: 11.5, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  color: color,
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ],
           ),
@@ -169,13 +199,22 @@ class _StatusDot extends StatelessWidget {
           decoration: BoxDecoration(
             color: status.color,
             shape: BoxShape.circle,
-            boxShadow: [BoxShadow(color: status.color.withValues(alpha: 0.6), blurRadius: 5)],
+            boxShadow: [
+              BoxShadow(
+                color: status.color.withValues(alpha: 0.6),
+                blurRadius: 5,
+              ),
+            ],
           ),
         ),
         const SizedBox(width: 6),
         Text(
           status.label,
-          style: TextStyle(color: status.color, fontSize: 12, fontWeight: FontWeight.w600),
+          style: TextStyle(
+            color: status.color,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
     );

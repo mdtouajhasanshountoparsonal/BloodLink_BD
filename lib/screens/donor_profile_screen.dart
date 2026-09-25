@@ -29,8 +29,9 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
   void initState() {
     super.initState();
     _userStream = RequestService.instance.userStreamByUid(widget.donorUid);
-    _historyStream =
-        RequestService.instance.donationsHistoryStream(widget.donorUid);
+    _historyStream = RequestService.instance.donationsHistoryStream(
+      widget.donorUid,
+    );
     ContactService.instance.whatsappInstalled().then((ok) {
       if (mounted) setState(() => _waOk = ok);
     });
@@ -48,10 +49,10 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
   String _tier(int n) => n >= 30
       ? 'প্ল্যাটিনাম ডোনার'
       : n >= 15
-          ? 'গোল্ড ডোনার'
-          : n >= 5
-              ? 'সিলভার ডোনার'
-              : 'ব্রোঞ্জ ডোনার';
+      ? 'গোল্ড ডোনার'
+      : n >= 5
+      ? 'সিলভার ডোনার'
+      : 'ব্রোঞ্জ ডোনার';
 
   Future<void> _call() async {
     final d = _donor;
@@ -75,8 +76,10 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
       _toast('নম্বর পাওয়া যায়নি');
       return;
     }
-    final ok = await ContactService.instance
-        .openWhatsapp(d.phone, text: 'রক্ত দরকার — BloodLink');
+    final ok = await ContactService.instance.openWhatsapp(
+      d.phone,
+      text: 'রক্ত দরকার — BloodLink',
+    );
     if (!ok) _toast('WhatsApp খোলা যায়নি');
   }
 
@@ -98,14 +101,19 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
               final donor = snap.data ?? _donor;
               if (snap.hasError) {
                 return const Center(
-                  child: Text('প্রোফাইল লোড করা যায়নি',
-                      style: TextStyle(color: AppColors.textSecondary)),
+                  child: Text(
+                    'প্রোফাইল লোড করা যায়নি',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
                 );
               }
-              if (donor == null && snap.connectionState != ConnectionState.waiting) {
+              if (donor == null &&
+                  snap.connectionState != ConnectionState.waiting) {
                 return const Center(
-                  child: Text('ডোনার পাওয়া যায়নি',
-                      style: TextStyle(color: AppColors.textSecondary)),
+                  child: Text(
+                    'ডোনার পাওয়া যায়নি',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
                 );
               }
               _donor = donor;
@@ -119,11 +127,16 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
                       children: [
                         GestureDetector(
                           onTap: () => Navigator.of(context).pop(),
-                          child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                          child: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 20,
+                          ),
                         ),
                         const SizedBox(width: 14),
-                        Text('ডোনার প্রোফাইল',
-                            style: Theme.of(context).textTheme.headlineMedium),
+                        Text(
+                          'ডোনার প্রোফাইল',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
                       ],
                     ),
                   ),
@@ -135,7 +148,10 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
                           ? const Padding(
                               padding: EdgeInsets.all(40),
                               child: Center(
-                                  child: CircularProgressIndicator(color: AppColors.primary)),
+                                child: CircularProgressIndicator(
+                                  color: AppColors.primary,
+                                ),
+                              ),
                             )
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +233,10 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
                         const SizedBox(width: 8),
                         if (d.verified)
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.gold.withValues(alpha: 0.25),
                               borderRadius: BorderRadius.circular(999),
@@ -225,7 +244,11 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.verified_rounded, size: 13, color: AppColors.gold),
+                                Icon(
+                                  Icons.verified_rounded,
+                                  size: 13,
+                                  color: AppColors.gold,
+                                ),
                                 SizedBox(width: 4),
                                 Text(
                                   'ভেরিফাইড',
@@ -240,7 +263,10 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
                           )
                         else
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(999),
@@ -266,9 +292,15 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
             children: [
               _statBox('${d.donations}', 'ডোনেশন'),
               const SizedBox(width: 10),
-              _statBox(d.status == DonorStatus.available ? 'উপলব্ধ' : 'ব্যস্ত', 'অবস্থা'),
+              _statBox(
+                d.status == DonorStatus.available ? 'উপলব্ধ' : 'ব্যস্ত',
+                'অবস্থা',
+              ),
               const SizedBox(width: 10),
-              _statBox(_lastDonationText(d.lastDonation).split(' ').first, 'সর্বশেষ'),
+              _statBox(
+                _lastDonationText(d.lastDonation).split(' ').first,
+                'সর্বশেষ',
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -304,7 +336,10 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
               ),
               child: Text(
                 d.showPhone ? 'নম্বর দেওয়া নেই' : 'নম্বর লুকানো আছে',
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13),
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.8),
+                  fontSize: 13,
+                ),
               ),
             ),
         ],
@@ -371,7 +406,10 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
             const SizedBox(height: 2),
             Text(
               label,
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.75), fontSize: 10.5),
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.75),
+                fontSize: 10.5,
+              ),
             ),
           ],
         ),
@@ -411,18 +449,30 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
               children: [
                 Text(
                   'সর্বশেষ রক্তদান: ${d.lastDonation == null ? 'এখনো দেননি' : _shortDate(d.lastDonation!)}',
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 if (eligible)
                   const Text(
                     'এখনই রক্ত দিতে পারেন',
-                    style: TextStyle(color: AppColors.normal, fontSize: 12.5, fontWeight: FontWeight.w800),
+                    style: TextStyle(
+                      color: AppColors.normal,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w800,
+                    ),
                   )
                 else
                   Text(
                     'আবার পারবেন: ${_shortDate(win.eligibleFrom!)}\nআর ${win.remaining} দিন বাকি (${DonationEligibility.gapDays} দিনের নিয়ম)',
-                    style: const TextStyle(color: AppColors.urgent, fontSize: 12.5, fontWeight: FontWeight.w700, height: 1.5),
+                    style: const TextStyle(
+                      color: AppColors.urgent,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                      height: 1.5,
+                    ),
                   ),
               ],
             ),
@@ -442,7 +492,11 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
       ),
       child: Row(
         children: [
-          const Icon(Icons.workspace_premium_rounded, color: AppColors.gold, size: 34),
+          const Icon(
+            Icons.workspace_premium_rounded,
+            color: AppColors.gold,
+            size: 34,
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -450,12 +504,18 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
               children: [
                 Text(
                   _tier(d.donations),
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 3),
                 Text(
                   'এ পর্যন্ত ${d.donations} বার রক্ত দিয়েছেন; প্রতিবার রক্ত দেওয়া মানে ৩ জনের প্রাণ বাঁচানো।',
-                  style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                  ),
                 ),
               ],
             ),
@@ -502,21 +562,31 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Row(
                     children: [
-                      const Icon(Icons.water_drop, color: AppColors.critical, size: 17),
+                      const Icon(
+                        Icons.water_drop,
+                        color: AppColors.critical,
+                        size: 17,
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           rec.patientName.isEmpty && rec.hospital.isEmpty
                               ? 'রক্ত দিয়েছেন'
                               : rec.hospital.isNotEmpty
-                                  ? '${rec.patientName} (${rec.hospital})'
-                                  : rec.patientName,
-                          style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
+                              ? '${rec.patientName} (${rec.hospital})'
+                              : rec.patientName,
+                          style: const TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                       Text(
                         _shortDate(rec.date),
-                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 11.5),
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 11.5,
+                        ),
                       ),
                     ],
                   ),
@@ -528,6 +598,5 @@ class _DonorProfileScreenState extends State<DonorProfileScreen> {
     );
   }
 
-  String _shortDate(DateTime t) =>
-      '${t.day}/${t.month}/${t.year}';
+  String _shortDate(DateTime t) => '${t.day}/${t.month}/${t.year}';
 }

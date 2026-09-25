@@ -12,9 +12,21 @@ class BackgroundDecor extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Positioned(top: -140, right: -110, child: _glow(AppColors.primary, 0.16, 340)),
-        Positioned(top: 330, left: -150, child: _glow(AppColors.info, 0.09, 320)),
-        Positioned(bottom: -120, right: -80, child: _glow(AppColors.violet, 0.08, 300)),
+        Positioned(
+          top: -140,
+          right: -110,
+          child: _glow(AppColors.primary, 0.16, 340),
+        ),
+        Positioned(
+          top: 330,
+          left: -150,
+          child: _glow(AppColors.info, 0.09, 320),
+        ),
+        Positioned(
+          bottom: -120,
+          right: -80,
+          child: _glow(AppColors.violet, 0.08, 300),
+        ),
         child,
       ],
     );
@@ -27,7 +39,10 @@ class BackgroundDecor extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: RadialGradient(
-          colors: [color.withValues(alpha: opacity), color.withValues(alpha: 0)],
+          colors: [
+            color.withValues(alpha: opacity),
+            color.withValues(alpha: 0),
+          ],
         ),
       ),
     );

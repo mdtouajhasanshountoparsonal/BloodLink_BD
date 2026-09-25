@@ -46,27 +46,49 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 20,
+                      ),
                     ),
                     const SizedBox(width: 14),
                     const Expanded(
-                      child: Text('রক্তের নোটিফিকেশন', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                      child: Text(
+                        'রক্তের নোটিফিকেশন',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                     ),
                     StreamBuilder(
                       stream: RequestService.instance.requestsStream(),
                       builder: (context, snap) {
-                        final n = _relevantOf(snap.data ?? const <BloodRequest>[]).length;
+                        final n = _relevantOf(
+                          snap.data ?? const <BloodRequest>[],
+                        ).length;
                         return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
                           decoration: BoxDecoration(
-                            color: n > 0 ? AppColors.critical.withValues(alpha: 0.15) : AppColors.surface,
+                            color: n > 0
+                                ? AppColors.critical.withValues(alpha: 0.15)
+                                : AppColors.surface,
                             borderRadius: BorderRadius.circular(999),
-                            border: Border.all(color: n > 0 ? AppColors.critical : AppColors.border),
+                            border: Border.all(
+                              color: n > 0
+                                  ? AppColors.critical
+                                  : AppColors.border,
+                            ),
                           ),
                           child: Text(
                             n > 0 ? '$n টি' : 'কিছু নেই',
                             style: TextStyle(
-                              color: n > 0 ? AppColors.critical : AppColors.textSecondary,
+                              color: n > 0
+                                  ? AppColors.critical
+                                  : AppColors.textSecondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                             ),
@@ -82,10 +104,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 child: StreamBuilder(
                   stream: RequestService.instance.requestsStream(),
                   builder: (context, snap) {
-                    final list = _relevantOf(snap.data ?? const <BloodRequest>[]);
+                    final list = _relevantOf(
+                      snap.data ?? const <BloodRequest>[],
+                    );
                     if (snap.connectionState == ConnectionState.waiting) {
                       return const Center(
-                        child: CircularProgressIndicator(color: AppColors.primary),
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
                       );
                     }
                     if (list.isEmpty) {
@@ -95,12 +121,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.notifications_off_outlined, size: 42, color: AppColors.textSecondary),
+                              Icon(
+                                Icons.notifications_off_outlined,
+                                size: 42,
+                                color: AppColors.textSecondary,
+                              ),
                               SizedBox(height: 14),
                               Text(
                                 'আপনার ব্লাড গ্রুপের জন্য এখনো কোনো রিকোয়েস্ট নেই',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 14,
+                                ),
                               ),
                             ],
                           ),
@@ -116,7 +149,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         return RequestCard(
                           request: r,
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => RequestDetailScreen(request: r)),
+                            MaterialPageRoute(
+                              builder: (_) => RequestDetailScreen(request: r),
+                            ),
                           ),
                         );
                       },
@@ -147,10 +182,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     }).toList();
 
     int urgencyRank(Urgency u) => switch (u) {
-          Urgency.critical => 0,
-          Urgency.urgent => 1,
-          Urgency.normal => 2,
-        };
+      Urgency.critical => 0,
+      Urgency.urgent => 1,
+      Urgency.normal => 2,
+    };
 
     list.sort((a, b) {
       final u = urgencyRank(a.urgency).compareTo(urgencyRank(b.urgency));

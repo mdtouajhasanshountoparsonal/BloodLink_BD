@@ -40,13 +40,12 @@ class ChatMessage {
   final DateTime createdAt;
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) => ChatMessage(
-        id: (json['id'] ?? '') as String,
-        from: (json['from'] ?? '') as String,
-        fromName: (json['fromName'] ?? '') as String,
-        text: (json['text'] ?? '') as String,
-        createdAt:
-            (json['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      );
+    id: (json['id'] ?? '') as String,
+    from: (json['from'] ?? '') as String,
+    fromName: (json['fromName'] ?? '') as String,
+    text: (json['text'] ?? '') as String,
+    createdAt: (json['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+  );
 }
 
 class DonationRecord {
@@ -65,13 +64,14 @@ class DonationRecord {
   final DateTime date;
 
   factory DonationRecord.fromJson(Map<String, dynamic> json) => DonationRecord(
-        id: (json['id'] ?? '') as String,
-        hospital: (json['hospital'] ?? '') as String,
-        patientName: (json['patientName'] ?? '') as String,
-        bloodGroup: (json['bloodGroup'] ?? '') as String,
-        date:
-            (json['date'] as Timestamp?)?.toDate() ?? DateTime.fromMillisecondsSinceEpoch(0),
-      );
+    id: (json['id'] ?? '') as String,
+    hospital: (json['hospital'] ?? '') as String,
+    patientName: (json['patientName'] ?? '') as String,
+    bloodGroup: (json['bloodGroup'] ?? '') as String,
+    date:
+        (json['date'] as Timestamp?)?.toDate() ??
+        DateTime.fromMillisecondsSinceEpoch(0),
+  );
 }
 
 /// একই Firestore stream একাধিক screen/subscriber-এর মধ্যে share করে,
@@ -98,18 +98,18 @@ class _Shared<T> {
           controller.add(last);
         }
         _inner ??= _factory().listen(
-            (value) {
-              _lastValue = value;
-              for (final peer in List.of(_peers)) {
-                if (!peer.isClosed) peer.add(value);
-              }
-            },
-            onError: (Object e, StackTrace st) {
-              for (final peer in List.of(_peers)) {
-                if (!peer.isClosed) peer.addError(e, st);
-              }
-            },
-          );
+          (value) {
+            _lastValue = value;
+            for (final peer in List.of(_peers)) {
+              if (!peer.isClosed) peer.add(value);
+            }
+          },
+          onError: (Object e, StackTrace st) {
+            for (final peer in List.of(_peers)) {
+              if (!peer.isClosed) peer.addError(e, st);
+            }
+          },
+        );
       },
       onCancel: () {
         _peers.remove(controller);
@@ -126,7 +126,9 @@ class _Shared<T> {
 class RequestService {
   RequestService._() {
     unawaited(UsageCounter.instance.init());
-    _requestsShared = _Shared(() => _requestsQuery().snapshots().map(_mapRequests));
+    _requestsShared = _Shared(
+      () => _requestsQuery().snapshots().map(_mapRequests),
+    );
     _donorsShared = _Shared(() => _donorsQuery().snapshots().map(_mapDonors));
   }
   static final RequestService instance = RequestService._();
@@ -184,18 +186,16 @@ class RequestService {
         .snapshots()
         .map((snap) {
           UsageCounter.instance.trackReadN('responses', snap.docs.length);
-          return snap.docs
-              .map((d) {
-                final j = d.data();
-                return RequestResponse(
-                  uid: d.id,
-                  name: (j['name'] ?? '') as String,
-                  bloodGroup: (j['bloodGroup'] ?? 'O+') as String,
-                  status: (j['status'] ?? 'maybe') as String,
-                  phone: (j['phone'] ?? '') as String,
-                );
-              })
-              .toList();
+          return snap.docs.map((d) {
+            final j = d.data();
+            return RequestResponse(
+              uid: d.id,
+              name: (j['name'] ?? '') as String,
+              bloodGroup: (j['bloodGroup'] ?? 'O+') as String,
+              status: (j['status'] ?? 'maybe') as String,
+              phone: (j['phone'] ?? '') as String,
+            );
+          }).toList();
         });
   }
 
@@ -342,8 +342,9 @@ class RequestService {
 
   Stream<List<Donor>> donorsStream({String? bloodGroup}) {
     if (bloodGroup == null) return _donorsShared.stream;
-    return _donorsShared.stream
-        .map((list) => list.where((d) => d.bloodGroup == bloodGroup).toList());
+    return _donorsShared.stream.map(
+      (list) => list.where((d) => d.bloodGroup == bloodGroup).toList(),
+    );
   }
 
   Future<void> addRequest(BloodRequest request) async {
@@ -362,7 +363,11 @@ class RequestService {
       UsageCounter.instance.trackRead('users');
       if (!d.exists) return null;
       final json = Map<String, dynamic>.from(d.data()!);
-      return Donor.fromJson(json, uid: d.id, available: (json['available'] ?? true) as bool);
+      return Donor.fromJson(
+        json,
+        uid: d.id,
+        available: (json['available'] ?? true) as bool,
+      );
     });
   }
 
@@ -371,7 +376,11 @@ class RequestService {
     UsageCounter.instance.trackRead('users');
     if (!d.exists) return null;
     final json = Map<String, dynamic>.from(d.data()!);
-    return Donor.fromJson(json, uid: d.id, available: (json['available'] ?? true) as bool);
+    return Donor.fromJson(
+      json,
+      uid: d.id,
+      available: (json['available'] ?? true) as bool,
+    );
   }
 
   /// রোগী (রিকোয়েস্ট মালিক) ডোনারকে কনফার্ম করলে:
@@ -423,12 +432,15 @@ class RequestService {
         .limit(50)
         .snapshots()
         .map((snap) {
-          UsageCounter.instance.trackReadN('donationsHistory', snap.docs.length);
+          UsageCounter.instance.trackReadN(
+            'donationsHistory',
+            snap.docs.length,
+          );
           return snap.docs.map((d) {
-                final j = Map<String, dynamic>.from(d.data());
-                j['id'] = d.id;
-                return DonationRecord.fromJson(j);
-              }).toList();
+            final j = Map<String, dynamic>.from(d.data());
+            j['id'] = d.id;
+            return DonationRecord.fromJson(j);
+          }).toList();
         });
   }
 }
